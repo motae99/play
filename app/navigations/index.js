@@ -3,17 +3,18 @@ import Initial from '../screens/Initial'
 import AuthNavigation from './AuthNavigator'
 import AppNavigation from './AppNavigator'
 
+
 const SwitchNavigator = createSwitchNavigator(
   {
     Initial: Initial,
     Auth: AuthNavigation,
-    App: AppNavigation
+    App: AppNavigation,
   },
   {
-    initialRouteName: 'App'
+    initialRouteName: 'Initial'
   }
 )
 
 const AppContainer = createAppContainer(SwitchNavigator)
 
-export default AppContainer
+export default AppContainer 
