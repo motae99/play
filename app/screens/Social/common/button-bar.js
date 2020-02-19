@@ -1,6 +1,3 @@
-/**
- * Created by ggoma on 12/17/16.
- */
 import React, {Component} from 'react';
 import {
     Animated,
@@ -113,7 +110,7 @@ export default class ButtonBar extends Component {
             </View>
         )
     }
-}
+} 
 
 const styles = StyleSheet.create({
     container: {

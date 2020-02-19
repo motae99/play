@@ -1,6 +1,28 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
+import firestore from "@react-native-firebase/firestore";
+import { AsyncStorage } from 'react-native'; // had been removed replace with community async Storage
+// import AsyncStorage from '@react-native-community/async-storage';
+
+
+function onMessageReceived(message) {
+  console.log('message not ready shipped for testing')
+  const { type, timestamp } = message.data;
+
+  if (type === 'order_shipped') {
+    notifee.displayNotification({
+      title: 'Your order has been shipped',
+      // body: `Your order was shipped at ${new Date(Number(timestamp)).toString()}!`,
+      android: {
+        channelId: 'default',
+      },
+    });
+  }
+}
+
 
 
 
@@ -16,20 +38,21 @@ componentDidMount = async () =>
 
    const user = auth().currentUser;
     if (user) {
-      console.log('we have user', user)
-      console.log('has phone', user.phoneNumber)
-
       if(!user.phoneNumber){
-        // navigate to phone auth screen
-        // this.props.navigation.navigate('Phone')
-        console.log('no phone no')
         this.props.navigation.navigate('Phone')
-
       }
       if(user.phoneNumber){
-      // this.props.navigation.navigate('App')
-      console.log('good to go')
-      this.props.navigation.navigate('App')
+        // await messaging().registerForRemoteNotifications();
+        // const fcmToken = await messaging().getToken();
+        // console.log(fcmToken)
+        // // Update backend (e.g. Firestore) with our scoped token for the user
+        // await firestore().doc(`users/${user.uid}`)
+        //   .update({
+        //     fcmTokens: fcmToken,
+        //   });
+        await messaging().subscribeToTopic('test');
+
+        this.props.navigation.navigate('App')
       }
 
         
@@ -40,7 +63,14 @@ componentDidMount = async () =>
       this.props.navigation.navigate('Auth')
     }
 
+
+
 }
+
+
+
+ 
+// Unsubscribe from further message events
 
 
 

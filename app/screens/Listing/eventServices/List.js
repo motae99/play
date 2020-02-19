@@ -21,16 +21,29 @@
 // //     });
 // // }
 
-import React, { Component } from 'react';
-import { ActivityIndicator, Dimensions, FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+import React, { Component } from "react";
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from "react-native";
+import firestore from "@react-native-firebase/firestore";
 import Icon from "react-native-vector-icons/Ionicons";
 import Font from "react-native-vector-icons/FontAwesome";
+// import SkeletonContent from "react-native-skeleton-content";
+import {CirclesLoader, PulseLoader, TextLoader, DotsLoader} from 'react-native-indicator';
+
 import Swiber from "../components/Swiber";
 
-import * as Animatable from 'react-native-animatable';
 
-const { width, } = Dimensions.get('window');
+import * as Animatable from "react-native-animatable";
+
+const { width } = Dimensions.get("window");
 const height = width * 0.5;
 
 // Screen Dimensions
@@ -43,7 +56,7 @@ export default class Listing extends React.Component {
       limit: 3,
       lastVisible: null,
       loading: false,
-      refreshing: false,
+      refreshing: false
     };
   }
   // Component Did Mount
@@ -51,8 +64,7 @@ export default class Listing extends React.Component {
     try {
       // Cloud Firestore: Initial Query
       this.retrieveData();
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -61,125 +73,122 @@ export default class Listing extends React.Component {
     try {
       // Set State: Loading
       this.setState({
-        loading: true,
+        loading: true
       });
       // console.log('Retrieving Data');
       // Cloud Firestore: Query
       let initialQuery = await firestore()
-        .collection('partyHalls')
-        .orderBy('timestamp', 'asc')
-        .limit(3)
+        .collection("partyHalls")
+        .orderBy("timestamp", "asc")
+        .limit(4);
       // Cloud Firestore: Query Snapshot
       let documentSnapshots = await initialQuery.get();
       // Cloud Firestore: Document Data
-      let documentData = documentSnapshots.docs.map((document) => {
+      let documentData = documentSnapshots.docs.map(document => {
         // console.log("this is ID   : ",document.id)
 
         return {
           ...document.data(),
           key: document.id,
           isHearted: false
-        }
+        };
       });
       // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
       let lastVisible = documentData[documentData.length - 1].timestamp;
 
-      console.log("Last Visable ==== :",lastVisible);
+      console.log("Last Visable ==== :", lastVisible);
 
       // Set State
       this.setState({
         documentData: documentData,
         lastVisible: lastVisible,
-        loading: false,
+        loading: false
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
   // Retrieve More
   retrieveMore = async () => {
-    var {lastVisible} = this.state
+    var { lastVisible } = this.state;
     try {
       // Set State: Refreshing
       this.setState({
-        refreshing: true,
+        refreshing: true
       });
-      console.log('Retrieving additional Data lastVisible', this.state.lastVisible);
+      console.log(
+        "Retrieving additional Data lastVisible",
+        this.state.lastVisible
+      );
       // Cloud Firestore: Query (Additional Query)
       let additionalQuery = await firestore()
-        .collection('partyHalls')
-        .orderBy('timestamp', 'asc')
+        .collection("partyHalls")
+        .orderBy("timestamp", "asc")
         .startAfter(lastVisible)
-        .limit(2)
+        .limit(2);
       // Cloud Firestore: Query Snapshot
       let documentSnapshots = await additionalQuery.get();
       // Cloud Firestore: Document Data
-      let documentData = documentSnapshots.docs.map((document) => {
+      let documentData = documentSnapshots.docs.map(document => {
         // console.log("this is ID   : ",document.id)
         return {
           ...document.data(),
           key: document.id,
           isHearted: false
-        }
+        };
       });
       // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
-      if(documentData){
+      if (documentData) {
         // console.log("we Have more data ==== :",documentData);
 
         let lastVisible = documentData[documentData.length - 1].timestamp;
         // console.log("Last Visable ==== :",lastVisible);
         // Set State
-        if(lastVisible !== this.state.lastVisible){
+        if (lastVisible !== this.state.lastVisible) {
           this.setState({
-              documentData: [...this.state.documentData, ...documentData],
-              lastVisible: lastVisible,
-              // refreshing: false,
-              });
+            documentData: [...this.state.documentData, ...documentData],
+            lastVisible: lastVisible
+            // refreshing: false,
+          });
         }
-
       }
-      
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
   // Render Header
   renderHeader = () => {
     try {
-      return (
-        <Text style={styles.headerText}>Items</Text>
-      )
-    }
-    catch (error) {
+      return <Text style={styles.headerText}>Items</Text>;
+    } catch (error) {
       console.log(error);
     }
   };
   // Render Footer
-  
+
   renderFooter = () => {
     try {
       // Check If Loading
       if (this.state.refreshing) {
-        return (
-          <ActivityIndicator />
-        )
-      }
-      else {
+        return(
+          <View style={{flex:1, alignItems: "center", justifyContent: "center" }}>
+              <CirclesLoader />
+              <TextLoader text="Loading" />
+          </View>
+        ); 
+      } else {
         return null;
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
 
-  goMap = () =>{
-    this.props.navigation.navigate('MapListing', {data: documentData});
+  goMap = () => {
+    this.props.navigation.navigate("EventMap", { data: documentData });
   };
 
-  toggleHeart = (data) => {
+  toggleHeart = data => {
     // data.item.isSelect = !data.item.isSelect;
     // data.item.selectedClass = data.item.isSelect
     //   ? styles.selected
@@ -205,143 +214,175 @@ export default class Listing extends React.Component {
     // console.log("data", data)
 
     this.state.documentData[index] = data;
-    this.setState({documentData: this.state.documentData})
-    
+    this.setState({ documentData: this.state.documentData });
   };
 
-  Item = (item) => {
+  Item = item => {
     // console.log(item.key)
     return (
+      // <Animatable.View
+      //   animation="slideInUp"
+      //   // delay={2000}
+      //   // duration={2000}
+      //   onAnimationEnd={() =>
+      //     console.log("this footer animation ended")
+      //   }
+      // >
       <View key={item.key} style={styles.item}>
-        
-       
+        <Swiber swipeData={item} minimal={true}/>
 
-        <Swiber swipeData={item} autoPlay={false} />
-
-        <TouchableOpacity 
-            style={styles.moreButton}
-            onPress={() => this.props.navigation.navigate('Details', {data: item})}
-            >
-            <Icon name="ios-more" size={35} color={"#ffff"} />
+        <TouchableOpacity
+          style={styles.moreButton}
+          onPress={() =>
+            this.props.navigation.navigate("EventDetail", { data: item })
+          }
+        >
+          <Icon name="ios-more" size={35} color={"#ffff"} />
         </TouchableOpacity>
 
-
-        <TouchableOpacity  style={styles.heartButton} onPress={() => this.toggleHeart(item)}>
-          {
-            (item.isHearted) ? 
-            <Animatable.View animation="pulse" easing="ease-in" iterationCount="infinite" style={styles.heart }>
+        <TouchableOpacity
+          style={styles.heartButton}
+          onPress={() => this.toggleHeart(item)}
+        >
+          {item.isHearted ? (
+            <Animatable.View
+              animation="bounceIn"
+              easing="ease-in"
+              // iterationCount="infinite"
+              style={styles.heart}
+            >
               <Icon name="ios-heart" size={35} color={"red"} />
             </Animatable.View>
-            : 
-            <Animatable.View animation="pulse" easing="ease-out" iterationCount="infinite" style={styles.heart }>
+          ) : (
+            <Animatable.View
+              animation="pulse"
+              easing="ease-out"
+              iterationCount="infinite"
+              style={styles.heart}
+            >
               <Icon name="ios-heart-empty" size={35} color={"#ffff"} />
             </Animatable.View>
-
-          }
-          
+          )}
         </TouchableOpacity>
-        
-       
+        <Animatable.Text
+          animation="bounceInRight"
+          style={styles.providerName}
+        >
+          {item.partyHallName}
+        </Animatable.Text>
       </View>
+      // </Animatable.View>
     );
   };
 
-
   render() {
-    const {loading, documentData, refreshing} = this.state
-    if(loading){
+    const { loading, documentData, refreshing } = this.state;
+    if (loading) {
       return(
-        // <Text>Loading</Text>
-        <ActivityIndicator />
-      )
+        <View style={{flex:1, alignItems: "center", justifyContent: "center" }}>
+            <CirclesLoader />
+            <TextLoader text="Loading" />
+        </View>
+      ); 
     }
 
-    if(documentData && documentData.length > 0){
+    if (documentData && documentData.length > 0) {
       return (
         <View style={styles.container}>
-            <FlatList
-                data={documentData}
-                renderItem={({ item }) => ( this.Item(item))}
-  
-                keyExtractor={item => String(item.key)}
-                // Header (Title)
-                ListHeaderComponent={this.renderHeader}
-                // // Footer (Activity Indicator)
-                ListFooterComponent={this.renderFooter}
-                // // On End this.ached (Takes a function)
-                onEndReached={ this.retrieveMore }
-                // // How Close To The End Of List Until Next Data Request Is Made
-                onEndReachedThreshold={0.1}
-                // // Refreshing (Set To True When End Reached)
-                refreshing={refreshing}
-            />
+          <FlatList
+            data={documentData}
+            renderItem={({ item }) => this.Item(item)}
+            keyExtractor={item => String(item.key)}
+            // Header (Title)
+            ListHeaderComponent={this.renderHeader}
+            // // Footer (Activity Indicator)
+            ListFooterComponent={this.renderFooter}
+            // // On End this.ached (Takes a function)
+            onEndReached={this.retrieveMore}
+            // // How Close To The End Of List Until Next Data Request Is Made
+            onEndReachedThreshold={0.1}
+            // // Refreshing (Set To True When End Reached)
+            refreshing={refreshing}
 
-            
-            
-            <TouchableOpacity 
-              style={styles.mapButton}
-              onPress={() => this.props.navigation.navigate('MapListing', {data: documentData})}
-              >
-              <Icon name="ios-map" size={35} color={"#ffff"} />
-            </TouchableOpacity>
-          </View>
-      )
+            // Performance settings
+            // removeClippedSubviews={true} // Unmount components when outside of window 
+            // initialNumToRender={2} // Reduce initial render amount
+            // maxToRenderPerBatch={1} // Reduce number in each render batch
+            // updateCellsBatchingPeriod={100} // Increase time between renders
+            // windowSize={7} // Reduce the window size
+          />
+
+          <TouchableOpacity
+            style={styles.mapButton}
+            onPress={() =>
+              this.props.navigation.navigate("EventMap", {
+                data: documentData
+              })
+            }
+          >
+            <Icon name="ios-map" size={35} color={"#ffff"} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() =>
+              this.props.navigation.navigate("EventFilter", {
+                data: documentData
+              })
+            }
+          >
+            <Icon name="ios-map" size={35} color={"#ffff"} />
+          </TouchableOpacity>
+        </View>
+      );
     }
 
     return null;
-    
   }
 }
 
-Listing.navigationOptions={  
-    tabBarIcon:({tintColor, focused})=>(  
-        <Icon  
-            name={focused ? 'ios-home' : 'md-home'}  
-            color={tintColor}  
-            size={25}  
-        />  
-
-    ), 
-    // tabBarVisible: false
-} 
+Listing.navigationOptions = {
+  tabBarIcon: ({ tintColor, focused }) => (
+    <Icon name={focused ? "ios-home" : "md-home"} color={tintColor} size={25} />
+  )
+  // tabBarVisible: false
+};
 // Styles
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
-  wrapper: {
-    
-  },
+  wrapper: {},
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: "#f9c2ff",
     flex: 1,
     margin: 10,
-    height: height+5,
+    height: height + 5
   },
   slide: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: "transparent"
   },
   imgBackground: {
     width,
     height,
-    backgroundColor: 'transparent',
-    position: 'absolute'
+    backgroundColor: "transparent",
+    position: "absolute"
   },
   image: {
     width,
     height,
-    resizeMode: 'cover'
+    resizeMode: "cover"
   },
 
   title: {
     position: "absolute",
     paddingHorizontal: 15,
-    backgroundColor: 'transparent',
-    color: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: "transparent",
+    color: "rgba(255, 255, 255, 0.9)",
     fontSize: 20,
     bottom: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold"
     // textAlign: 'center'
   },
   discription: {
@@ -349,46 +390,57 @@ const styles = StyleSheet.create({
     bottom: 25,
     marginTop: 5,
     paddingHorizontal: 15,
-    backgroundColor: 'transparent',
-    color: 'rgba(255, 255, 255, 0.75)',
+    backgroundColor: "transparent",
+    color: "rgba(255, 255, 255, 0.75)",
     fontSize: 15,
-    fontStyle: 'italic',
+    fontStyle: "italic"
     // textAlign: 'center'
   },
   rating: {
     position: "absolute",
     top: 15,
-    right: 5,
+    right: 5
   },
   mapButton: {
     position: "absolute",
     bottom: 30,
     right: 30,
-    backgroundColor: 'transparent',
-    color: 'rgba(255, 255, 255, 0.75)',
+    backgroundColor: "transparent",
+    color: "rgba(255, 255, 255, 0.75)",
     zIndex: 1
   },
-  heartButton: {  
+  filterButton: {
     position: "absolute",
-    top: 10, 
-    right: 10, 
+    bottom: 0,
+    right: 150,
+    backgroundColor: "transparent",
+    color: "rgba(255, 255, 255, 0.75)",
+    zIndex: 1
+  },
+  heartButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
     opacity: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.10)',
-    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.10)",
+    borderRadius: 20
     // textAlignVertical:"center", alignContent:"center", alignItems:"center", alignSelf:"center"
   },
-  moreButton: {  
+  providerName: {
     position: "absolute",
-    top: 10, 
-    left: 10, 
+    bottom: 15,
+    color: "white",
+  },
+  moreButton: {
+    position: "absolute",
+    top: 10,
+    left: 10,
     opacity: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.10)',
-    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.10)",
+    borderRadius: 20
     // textAlignVertical:"center", alignContent:"center", alignItems:"center", alignSelf:"center"
   },
-  heart: { textAlign: 'center',  color: "white", fontSize: 28 }
-
-  
+  heart: { textAlign: "center", color: "white", fontSize: 28 }
 });
 // import React from "react";
 // import ListView from "./ListView";
@@ -606,13 +658,12 @@ const styles = StyleSheet.create({
 //   }
 // }
 
-
 // const styles = StyleSheet.create({
 //     container: {
 //       flex: 1,
 //     },
 //     wrapper: {
-      
+
 //     },
 //     item: {
 //       backgroundColor: '#f9c2ff',
@@ -635,7 +686,7 @@ const styles = StyleSheet.create({
 //       height,
 //       resizeMode: 'cover'
 //     },
-  
+
 //     title: {
 //       position: "absolute",
 //       paddingHorizontal: 15,
@@ -670,17 +721,15 @@ const styles = StyleSheet.create({
 //       color: 'rgba(255, 255, 255, 0.75)',
 //       zIndex: 1
 //     },
-//     heartButton: {  
+//     heartButton: {
 //       position: "absolute",
-//       top: 10, 
-//       right: 10, 
+//       top: 10,
+//       right: 10,
 //       opacity: 5,
 //       backgroundColor: 'rgba(255, 255, 255, 0.10)',
 //       borderRadius: 20,
 //       // textAlignVertical:"center", alignContent:"center", alignItems:"center", alignSelf:"center"
 //     },
 //     heart: { textAlign: 'center',  color: "white", fontSize: 28 }
-  
-    
+
 //   });
-  

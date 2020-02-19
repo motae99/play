@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 import styles from './styles/SliderEntry.style';
-import LottieView from 'lottie-react-native';
+// import LottieView from 'lottie-react-native';
 
 
 export default class SliderEntry extends Component {
@@ -93,7 +93,7 @@ export default class SliderEntry extends Component {
             <TouchableOpacity
               activeOpacity={1}
               style={styles.slideInnerContainer}
-              onPress={() => navigation.navigate('Events')}
+              onPress={() => navigation.navigate('EventListing')}
               >
                 <View style={styles.shadow} />
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
@@ -111,7 +111,7 @@ export default class SliderEntry extends Component {
                 </View>
                 
                 
-                <LottieView
+                {/* <LottieView
                         ref={this.setAnim}
                         // autoPlay={!progress}
                         style={{position: 'absolute', left: 0, right: 0, top:0, bottom: 0,bottom: 60, height: 300, }}
@@ -119,7 +119,7 @@ export default class SliderEntry extends Component {
                         // progress={progress}
                         // loop={loop}
                         enableMergePathsAndroidForKitKatAndAbove
-                    />
+                    /> */}
                 
             </TouchableOpacity>
         );

@@ -95,15 +95,16 @@ export default class NewsFeedItem extends Component {
                 visible={this.state.comment}
                 onRequestClose={() => this.setState({comment: false})}
             >
-                <SocialComments closeModal={ () => this.setState({comment: false})} />
+                <SocialComments data={this.props.data} closeModal={ () => this.setState({comment: false})}  />
             </Modal>
         )
 
     }
 
       
-    buttonOnPress(name) {
-        console.log(name);
+    buttonOnPress(name, item) {
+        console.log('loging button name',name);
+        // console.log('item selected', item);
         switch(name) {
             case 'Like':
                 this.setState({likes: this.state.likes + 1});
@@ -138,16 +139,18 @@ export default class NewsFeedItem extends Component {
 
     renderLikesAndComments() {
         const {likes, comments, share} = this.state;
+        const {item} = this.props.data;
+        console.log(item.likes)
 
-        if(likes == 0 && comments == 0) {
+        if(!likes) {
             return
         }
 
         return (
             <View style={styles.likesComments}>
-                <Text style={styles.likeText}>{likes > 0 ? <Ionicons name='md-thumbs-up' color={Colors.main}/> : ''}{likes == 0 ? '' : ' ' + likes}</Text>
-                <Text style={styles.likeText}>{comments == 0 ? '' : comments + ' Comments'}</Text>
-                <Text style={styles.likeText}>{share == 0 ? '' : share + ' Share'}</Text>
+                <Text style={styles.likeText}>{item.likes > 0 ? <Ionicons name='md-thumbs-up' color={Colors.main}/> : ''}{!item.likes? '' : ' ' + item.likes }</Text>
+                {/* <Text style={styles.likeText}>{comments == 0 ? '' : comments + ' Comments'}</Text>
+                <Text style={styles.likeText}>{share == 0 ? '' : share + ' Share'}</Text> */}
             </View>
         )
     }
@@ -156,6 +159,7 @@ export default class NewsFeedItem extends Component {
         const {buttons, icons} = this.state;
         const {item} = this.props.data;
         //onPress={this.buttonOnPress.bind(this)}
+        
         return buttons.map((button, i) => {
        
             // console.log('all buttons : => ',button)

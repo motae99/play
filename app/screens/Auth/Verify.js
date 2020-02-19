@@ -144,8 +144,8 @@ export default class example extends Component {
             auth().onAuthStateChanged( async (user) => {
                 if (user) {  
                 // Stop the login flow / Navigate to next page
-                  console.log('User info for provider: ', user);
-                  console.log('+++++++++_____________========')
+                  // console.log('User info for provider: ', user);
+                  // console.log('+++++++++_____________========')
                   this.setState({status: 'success'});
                   const userData =  {  
                       uid: user.uid,

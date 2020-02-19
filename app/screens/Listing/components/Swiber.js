@@ -3,8 +3,8 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ToolbarAndroid,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 import FastImage from "react-native-fast-image";
@@ -13,7 +13,7 @@ import Swiper from "react-native-swiper";
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: 650
+    height: "100%"
   },
   dots:{
    backgroundColor: "rgba(255,255,255,.3)",
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
  },
 });
 
-export default function Swipe({swipeData, autoPlay}) {
+export default function Swipe({swipeData, autoPlay=false, minimal=false}) {
  const data = swipeData;
 
   return (
@@ -69,6 +69,8 @@ export default function Swipe({swipeData, autoPlay}) {
       }}
       loop={true}
       autoplay={autoPlay}
+      loadMinimal={minimal}
+      // loadMinimalLoader= {()=> <ActivityIndicator/>}
     >
       {data.files.map((image, key) => (
         <View key={key} style={styles.slide}>

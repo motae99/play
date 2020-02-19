@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useContext} from 'react';
 import {
     View,
     Text,
@@ -8,48 +8,65 @@ import {
 
 import Colors from '../../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { UserContext } from '../../../context/UserContext';
 
-export default class Button extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pressed: true,
-            liked: props.data.isLiked,
-            didComment: props.data.didComment,
-            shared: props.data.shared,
-            name: props.name,
-            icon: props.icon,
-            data: props.data,
-        }
-    }
+// const {name, icon, data, onPress} = this.props;
+// const {isLiked, didComment, shared} = data;
 
-    pressed(name) {
+export default function Button({name, icon, data, onPress}){
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         pressed: true,
+    //         liked: props.data.isLiked,
+    //         didComment: props.data.didComment,
+    //         shared: props.data.shared,
+    //         name: props.name,
+    //         icon: props.icon,
+    //         data: props.data,
+    //     }
+    
+    // }
 
+    const {postDislike, postLike, postsLiked} = useContext(UserContext);
+    // const {isLiked, didComment, shared} = data;
+    // console.log('data bassed: ', data.isLiked)
+    const [liked, setLike] = useState(data.isLiked)
+    const [didComment, setComment] = useState(data.didComment)
+    const [shared, setshare] = useState(data.shared)
+
+
+    pressed = (name) => {
         if(name == 'Like') {
-            this.setState({liked: !this.state.liked});
-
-            if(!this.state.liked) {
-                this.props.onPress('Like');
+            // this.setState({liked: !this.state.liked});
+            // console.log('liked log',liked)
+            setLike(!liked)
+            console.log('reverse liked log',liked)
+            // socialLike(User, data)
+            if(!liked) {
+                onPress('Like');
             } else {
-                this.props.onPress('Dislike');
+                onPress('Dislike');
             }
 
 
         }
         if(name == 'Comment') {
             // this.setState({pressed: !this.state.didComment});
-            this.props.onPress('Comment');
+            onPress('Comment');
             // if(!this.state.pressed) {
-            //     this.props.onPress('Like');
+            //     onPress('Like');
             // }
 
 
         }
         if(name == 'Share') {
             // this.setState({pressed: !this.state.shared});
-            this.props.onPress('Share');
+            console.log("these are post been liked",postsLiked)
+
+            onPress('Share');
             // if(!this.state.pressed) {
-            //     this.props.onPress('Like');
+            //     onPress('Like');
             // }
 
 
@@ -57,15 +74,50 @@ export default class Button extends Component {
 
     }
 
-    render() {
-        const {pressed, name, icon, data, liked, didComment, shared} = this.state;
-        return (
-            <TouchableOpacity onPress={() => this.pressed(name)} style={styles.buttonItem}>
-                    <Ionicons name={icon} size={16} color={liked ? Colors.liked : Colors.like}/>
-                    <Text style={[styles.text, {color: liked ? Colors.liked : Colors.like}]}>{name}</Text>
-            </TouchableOpacity>
-        )
+    const reverse = () => {
+        
+        if(liked){
+            onPress('Dislike');
+            setLike(false)
+            postDislike(data)
+        }
+        else{
+            onPress('Like');
+            setLike(true)
+            postLike(data)
+        }
     }
+
+
+        if(name == 'Like'){
+            return (
+                <TouchableOpacity onPress={ reverse } style={styles.buttonItem}>
+                        <Ionicons name={icon} size={16} color ={ liked ? Colors.liked : Colors.like}/>
+                        <Text style={[styles.text, {color: liked ? Colors.liked : Colors.like}]}>{name}</Text>
+                </TouchableOpacity>
+            )
+        }
+
+        if(name == 'Comment'){
+            return (
+                <TouchableOpacity onPress={ () => onPress(name) } style={styles.buttonItem}>
+                        <Text style={[styles.text, {color: data.comments > 0 ? Colors.liked : Colors.like}]}>{data.comments}  </Text>
+                        <Ionicons name={icon} size={16} color ={ data.comments > 0 ? Colors.liked : Colors.like}/>
+                        <Text style={[styles.text, {color: data.comments > 0 ? Colors.liked : Colors.like}]}>{name}</Text>
+                </TouchableOpacity>
+            )
+        }
+
+        else {
+            return (
+                <TouchableOpacity onPress={() => onPress(name)} style={styles.buttonItem}>
+                        <Ionicons name={icon} size={16} color ={Colors.like}/>
+                        <Text style={[styles.text, {color:Colors.like}]}>{name}</Text>
+                </TouchableOpacity>
+            )
+        }
+        
+    
 }
 
 const styles = StyleSheet.create({

@@ -140,7 +140,6 @@ export default class PostScreen extends React.Component {
                     autherName: currentUser.displayName,
                     autherPhoto: currentUser.photoURL,
                     timestamp: Date.now(),
-                    timestamp: Date.now(),
                     title: text, 
                     type: type,
                     video: this.state.video

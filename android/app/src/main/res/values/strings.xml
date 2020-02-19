@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">kanta</string>
+    <string name="facebook_app_id">2904503169599856</string>
+    <string name="fb_login_protocol_scheme">fb2904503169599856</string>
+    <string name="googe_map_api_key">AIzaSyAiJZomZxOvuedI5Q5bATkcH3FWsljlhdo</string>
+</resources>

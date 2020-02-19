@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "443844365530",
+    "firebase_url": "https://kanta-ddb2c.firebaseio.com",
+    "project_id": "kanta-ddb2c",
+    "storage_bucket": "kanta-ddb2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443844365530:android:d9445821b12fc9d6e169e3",
+        "android_client_info": {
+          "package_name": "com.kanta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443844365530-9ts71gcgqujbutampdkcul9g27evq6eo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kanta",
+            "certificate_hash": "c7d0e5e995497523e1c3c9fa4f8496c6deb88724"
+          }
+        },
+        {
+          "client_id": "443844365530-gr1hepnuf3c5rvmo12lr72v431757pio.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL1COuY2EOjWcrC9SS0XkEMsHfOWWvFJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443844365530-gr1hepnuf3c5rvmo12lr72v431757pio.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

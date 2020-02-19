@@ -15,6 +15,20 @@ import UserStack from "../screens/Profile/Index";
 import OfferStack from "../screens/Offers/Index";
 import SocialStack from "../screens/Social/Index";
 
+import { AnimatedCircleBarComponent } from 'react-navigation-custom-bottom-tab-component/AnimatedCircleBarComponent';
+
+// const Navigation = createBottomTabNavigator(
+//   {
+//     UserStack,
+//     OfferStack,
+//     Listing,
+//     HomeScreen,
+//   },
+//   {
+//     tabBarComponent: AnimatedCircleBarComponent,
+//   },
+// );
+// export default Navigation;
 const AppNavigation = createStackNavigator(
   {
     default: createBottomTabNavigator(
@@ -90,6 +104,9 @@ const AppNavigation = createStackNavigator(
         // }
       },
       {
+        tabBarComponent: AnimatedCircleBarComponent,
+      },
+      {
         defaultNavigationOptions: {
           tabBarOnPress: ({ navigation, defaultHandler }) => {
             if (navigation.state.key === "Post") {
@@ -106,12 +123,12 @@ const AppNavigation = createStackNavigator(
         }
       }
     ),
-    postModal: {
-      screen: PostScreen
-    },
-    commentModal: {
-      screen: CommentScreen
-    }
+    // postModal: {
+    //   screen: PostScreen
+    // },
+    // commentModal: {
+    //   screen: CommentScreen
+    // }
   },
   {
     mode: "modal",

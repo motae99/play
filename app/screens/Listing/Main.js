@@ -7,7 +7,6 @@ import { sliderWidth, itemWidth } from './styles/SliderEntry.style';
 import SliderEntry from './SliderEntry';
 import styles, { colors } from './styles/Index.style';
 import { scrollInterpolators, animatedStyles } from './utils/animations';
-import LottieView from 'lottie-react-native';
 
 
 const IS_ANDROID = Platform.OS === 'android';

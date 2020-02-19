@@ -15,6 +15,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import { UserContext } from '../../context/UserContext';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -33,6 +34,8 @@ import Comments from '../CommentScreen';
 const THRESHOLD = 100; // the mumber of pixles in sceen to start interacting with 
 
 export default class Social extends Component {
+    static contextType = UserContext;
+
     constructor(props) {
         super(props);
 
@@ -70,7 +73,9 @@ export default class Social extends Component {
 
 
     componentDidMount() {
+
         setTimeout(() => {this.measureView()}, 0);
+        // console.log('posts liked', User)
 
         try {
             // Cloud Firestore: Initial Query
@@ -104,11 +109,13 @@ export default class Social extends Component {
         // Cloud Firestore: Document Data
         let documentData = documentSnapshots.docs.map((document) => {
             // console.log("this is ID   : ",document.id)
+            var isLiked = this.context.postsLiked.some(item => document.id === item.key);
+            console.log("this is post   : ",document.id, 'isLiked', isLiked)
 
             return {
             ...document.data(),
             key: document.id,
-            isLiked: false
+            isLiked: isLiked
             }
         });
         // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
@@ -140,11 +147,12 @@ export default class Social extends Component {
             let documentSnapshots = await additionalQuery.get();
             // Cloud Firestore: Document Data
             let documentData = documentSnapshots.docs.map((document) => {
-                // console.log("this is ID   : ",document.id)
+                var isLiked = this.context.postsLiked.some(item => document.id === item.key);
+                
                 return {
                 ...document.data(),
                 key: document.id,
-                isLiked: false
+                isLiked: isLiked
                 }
             });
             // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
@@ -227,34 +235,6 @@ export default class Social extends Component {
         const e = event.nativeEvent;
         const l_height = e.contentSize.height;
         const offset = e.contentOffset.y;
-
-        // const scrollPosition = event.nativeEvent.contentOffset.y;
-        // // const scrollPosition = offset;
-
-        // // to calculate video layout
-        // this.position.start = event.nativeEvent.layout.y - height + THRESHOLD;
-        // this.position.end = event.nativeEvent.layout.y + event.nativeEvent.layout.height - THRESHOLD;
-        // // to calculate video layout
-        
-        // const paused = this.state.paused;
-        // const { start, end } = this.position;
-        // console.log(start);
-        // console.log("------");
-        // console.log(end);
-
-        // if (scrollPosition > start && scrollPosition < end && paused) {
-        //     this.setState({ paused: false });
-        //     console.log('should play Video');
-        // } else if (
-        // (scrollPosition > end || scrollPosition < start) && !paused
-        // ) {
-        //     this.setState({ paused: true });
-        //     console.log('should stop play Video');
-
-        // }else {
-        //     console.log('Not working');
-        // }
-  
 
         if(offset > this.offsetY) {
             if(!(offset < 32)) {
