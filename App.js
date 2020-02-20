@@ -1,5 +1,3 @@
-
-
 import React, { Component } from 'react';
 import { StackNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from "react-navigation-stack";
@@ -34,7 +32,7 @@ const Navigator = createStackNavigator({
 
     List: { screen: List },
     Infinit: { screen: infinit },
-    MapListing: { screen: MapListing },
+    // MapListing: { screen: MapListing },
     ListView: { screen: ListView },
     Comments: { screen: Comments },
     Availability: { screen: Availability },
