@@ -4,24 +4,23 @@ import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import firestore from "@react-native-firebase/firestore";
-import { AsyncStorage } from 'react-native'; // had been removed replace with community async Storage
-// import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
-function onMessageReceived(message) {
-  console.log('message not ready shipped for testing')
-  const { type, timestamp } = message.data;
+// function onMessageReceived(message) {
+//   console.log('message not ready shipped for testing')
+//   const { type, timestamp } = message.data;
 
-  if (type === 'order_shipped') {
-    notifee.displayNotification({
-      title: 'Your order has been shipped',
-      // body: `Your order was shipped at ${new Date(Number(timestamp)).toString()}!`,
-      android: {
-        channelId: 'default',
-      },
-    });
-  }
-}
+//   if (type === 'order_shipped') {
+//     notifee.displayNotification({
+//       title: 'Your order has been shipped',
+//       // body: `Your order was shipped at ${new Date(Number(timestamp)).toString()}!`,
+//       android: {
+//         channelId: 'default',
+//       },
+//     });
+//   }
+// }
 
 
 
@@ -31,12 +30,9 @@ export default class Initial extends Component {
     super();
 }
 
+componentDidMount = async () => { 
 
-
-componentDidMount = async () => 
-{ 
-
-   const user = auth().currentUser;
+   const user = await auth().currentUser;
     if (user) {
       if(!user.phoneNumber){
         this.props.navigation.navigate('Phone')
@@ -50,7 +46,7 @@ componentDidMount = async () =>
         //   .update({
         //     fcmTokens: fcmToken,
         //   });
-        await messaging().subscribeToTopic('test');
+        // await messaging().subscribeToTopic('test');
 
         this.props.navigation.navigate('App')
       }
@@ -60,7 +56,7 @@ componentDidMount = async () =>
       console.log('No logged in User navigate to Auth')
 
       // if the user has previously signed out from the app
-      this.props.navigation.navigate('Auth')
+      this.props.navigation.navigate('App')
     }
 
 

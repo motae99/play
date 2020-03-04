@@ -1,12 +1,12 @@
 import React from 'react';
-import {PixelRatio, Platform, Dimensions} from 'react-native';
+import {PixelRatio, Platform, Dimensions, StatusBar} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 const realWidth = height > width ? width : height;
 const realHeight = height > width ? height : width;
 
 
-const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
+const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44+StatusBar.currentHeight : 56+StatusBar.currentHeight;
 
 
 const relativeWidth = num => (realWidth * num) / 100;

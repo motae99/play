@@ -2,12 +2,13 @@ import React, { createContext, useState, useEffect } from "react";
 import { AsyncStorage } from 'react-native'; // had been removed replace with community async Storage
 // import AsyncStorage from '@react-native-community/async-storage';
 
-import notifee from '@notifee/react-native';
+// // import notifee from '@notifee/react-native';
 
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import messaging from '@react-native-firebase/messaging';
+import analytics from '@react-native-firebase/analytics';
 
 export const UserContext = createContext();
 
@@ -31,6 +32,13 @@ const UserContextProvider = props => {
     });
 
     setpostsLiked(all);
+  }
+
+  async function onSignIn(user) {
+    await Promise.all([
+      analytics().setUserId(user.uid),
+      analytics().setUserProperty('account_balance', user.balance),
+    ]);
   }
 
   async function checkPermission() {
@@ -75,6 +83,8 @@ const UserContextProvider = props => {
     }
    }
 
+  
+
 
   
 
@@ -82,6 +92,7 @@ const UserContextProvider = props => {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged( user => {
       setUser(user);
+      onSignIn(user)
       // getLikes(user);
       // checkPermission();
     });
@@ -174,7 +185,26 @@ const UserContextProvider = props => {
     }
   };
 
-  // console.log('posts liked : ', postsLiked)
+  const BookEvent = async ({event, time}) => {
+    
+    console.log(event)
+    console.log(time)
+    // console.log(services)
+
+    // await firestore()
+    //   .collection("users")
+    //   .doc(User.uid)
+    //   .collection("postsLike")
+    //   .doc(post.key)
+    //   .delete();
+
+    // await firestore()
+    //   .collection("posts")
+    //   .doc(post.key)
+    //   .update({
+    //     likes: post.likes,
+    //   });
+  };
 
   return (
     <UserContext.Provider
@@ -184,7 +214,8 @@ const UserContextProvider = props => {
         postLike,
         postDislike,
         postsLiked,
-        postComment
+        postComment,
+        BookEvent
       }}
     >
       {props.children}

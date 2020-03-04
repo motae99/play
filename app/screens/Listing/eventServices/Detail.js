@@ -7,11 +7,13 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Animated
+  Animated,
+  Modal
 } from "react-native";
 
 import FastImage from "react-native-fast-image";
 import Icon from "react-native-vector-icons/Ionicons";
+import Feather from "react-native-vector-icons/Feather";
 import Font from "react-native-vector-icons/FontAwesome";
 import Swiper from "react-native-swiper";
 import * as Animatable from "react-native-animatable";
@@ -19,19 +21,40 @@ import MapView, { Marker } from "react-native-maps";
 import { ThemeUtils, Color } from "../../../constants/index";
 
 import styles from "../styles/Detail.style";
+// import { UserContext } from '../../../context/UserContext';
 
-import Services from "../Services";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import analytics from '@react-native-firebase/analytics';
+
+
+import Services from "../components/serviceSingular";
+import Availability from "./Availability";
 import Swiber from "../components/Swiber";
 
 const { width, height } = Dimensions.get("window");
 
+async function trackScreenView(screen) {
+  // Set & override the MainActivity screen name
+  await analytics().setCurrentScreen(screen, screen);
+}
+
 export default class Details extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       data: this.props.navigation.state.params.data,
+      selected: this.props.navigation.state.params.selected,
+      // data: this.props.navigation.state.params.data,
+      modal: false,
       scrollY: new Animated.Value(0)
     };
+  }
+
+
+  componentDidMount(){
+    trackScreenView(this.state.data.partyHallName);
   }
 
   toggleHeart = data => {
@@ -106,8 +129,61 @@ export default class Details extends React.Component {
     });
   };
 
+  handleSelected = data => {
+    console.log(data);
+    this.setState({ selected: data });
+  };
+
+  // availability(data) {
+  //   this.setState({selected: data});
+  // }
+  renderModal() {
+    return (
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={this.state.modal}
+        onRequestClose={() => this.setState({ modal: false })}
+      >
+        <Availability
+          closeModal={() => this.setState({ modal: false })}
+          onTimeSelected={this.handleSelected}
+        />
+      </Modal>
+    );
+  }
+
+  async confirmBooking(){
+    const {data, selected} = this.state;
+    const user =  await auth().currentUser ;
+      
+    const saveData = {
+      eventProviderID: data.key,
+      eventProviderName: data.partyHallName,
+      eventProviderImage: data.files[0].uri,
+      date: selected.date,
+      time: selected.time,
+      timeStamp: Date.now(),
+      status: 'booked'
+      // userId: auth().currentUser.uid,
+      // userName: auth().currentUser.displayName,
+      // userPhoto: auth().currentUser.photoURL,
+    }
+    // console.log(user)
+    // await firestore()
+    //   .collection("Booking")
+    //   .add(saveData);
+    // BookEvent(data, selected)
+  }
+
+  handleChoices= data => {
+    console.log(data);
+    // this.setState({ selected: data });
+  };
+  
+
   render() {
-    const { data } = this.state;
+    const { data, selected } = this.state;
     const ASPECT_RATIO = width / height;
     const LATITUDE_DELTA = 0.0522;
     const region = {
@@ -116,7 +192,6 @@ export default class Details extends React.Component {
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO
     };
-
     const headerBackgroundColor = this._getHeaderBackgroundColor();
 
     const headerImageOpacity = this._getHeaderImageOpacity();
@@ -125,12 +200,15 @@ export default class Details extends React.Component {
 
     const listViewTop = this._getListViewTopPosition();
 
+  
+
+
     return (
       <View style={styles.container}>
         <StatusBar
           translucent
           backgroundColor="transparent"
-          style={{ height: 80 }}
+          // style={{ height: 80 }}
         />
         {/* <StatusBar barStyle={'light-content'} backgroundColor={Color.STATUSBAR_COLOR}/> */}
 
@@ -144,7 +222,12 @@ export default class Details extends React.Component {
             }
           ]}
         >
-          <Swiber swipeData={data} autoPlay={true}/>
+          {/* <View Style={styles.headerImageStyle}> */}
+          <Swiber swipeData={data} autoPlay={true} />
+          {/* </View> */}
+          {/* <TouchableOpacity onPress={console.log("pressed")}> */}
+          
+          {/* </TouchableOpacity> */}
           {/* <FastImage source={{
                 uri: data.files[0].uri,
                 priority: FastImage.priority.normal,
@@ -162,8 +245,8 @@ export default class Details extends React.Component {
           ]}
         >
           <View style={styles.headerLeftIcon}>
-            <Icon
-              name="ios-heart"
+            <Feather
+              name="arrow-left"
               size={25}
               color={Color.HEADER_BACK_ICON_COLOR}
             />
@@ -184,10 +267,9 @@ export default class Details extends React.Component {
                     animation="bounceIn"
                     direction="alternate"
                     delay={2000}
-
                     style={styles.heart}
                   >
-                    <Icon name="ios-heart" size={35} color={"red"} />
+                    <Feather name="heart" size={35} color={"red"} />
                   </Animatable.View>
                 ) : (
                   <Animatable.View
@@ -196,7 +278,7 @@ export default class Details extends React.Component {
                     iterationCount="infinite"
                     style={styles.heart}
                   >
-                    <Icon name="ios-heart-empty" size={35} color={"#ffff"} />
+                    <Feather name="heart" size={35} color={"#ffff"} />
                   </Animatable.View>
                 )}
               </Animatable.View>
@@ -204,7 +286,7 @@ export default class Details extends React.Component {
           </View>
 
           <View style={styles.headerSecondRightIcon}>
-            <TouchableOpacity onPress={() => console.log('share')}>
+            <TouchableOpacity onPress={() => console.log("share")}>
               <Animatable.View
                 animation="slideInDown"
                 // delay={500}
@@ -214,15 +296,14 @@ export default class Details extends React.Component {
                 //   console.log("this footer animation ended")
                 // }
               >
-                  <Animatable.View
-                    animation="bounceIn"
-                    direction="alternate"
-                    // duration={2000}
-                    // delay={2000}
-                  >
-                    <Icon name="ios-share" size={35} color={"white"} />
-                  </Animatable.View>
-                
+                <Animatable.View
+                  animation="bounceIn"
+                  direction="alternate"
+                  // duration={2000}
+                  // delay={2000}
+                >
+                  <Feather name="share-2" size={35} color={"white"} />
+                </Animatable.View>
               </Animatable.View>
             </TouchableOpacity>
           </View>
@@ -275,7 +356,7 @@ export default class Details extends React.Component {
             </MapView>
             <View style={{ height: 900 }}>
               <Text>rendering services </Text>
-              <Services providerData={data} />
+              <Services providerData={data} choosen={this.handleChoices}/>
             </View>
           </Animated.View>
         </Animated.ScrollView>
@@ -283,24 +364,49 @@ export default class Details extends React.Component {
         <Animatable.View
           animation="fadeInUpBig"
           // delay={500}
-        //   duration={2000}
+          //   duration={2000}
           style={styles.footer}
           useNativeDriver={true}
-        //   onAnimationEnd={() => console.log("this footer animation ended")}
+          //   onAnimationEnd={() => console.log("this footer animation ended")}
         >
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("EventAvailability")}
-            style={styles.bottomButtons}
-          >
-            <Animatable.Text
-              animation="bounceIn"
-              delay={2000}
-              useNativeDriver={true}
-              style={{ textAlign: "center", fontSize: 20 }}
+          {this.renderModal()}
+          {selected ? (
+            <View>
+              <TouchableOpacity onPress={() => this.setState({ modal: true })}>
+                <Text>
+                  {this.state.selected.date} at {this.state.selected.time}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.confirmBooking() }
+                style={styles.bottomButtons}
+              >
+                <Animatable.Text
+                  animation="bounceIn"
+                  delay={2000}
+                  useNativeDriver={true}
+                  style={{ textAlign: "center", fontSize: 20 }}
+                >
+                  Book
+                </Animatable.Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+          {!selected ? (
+            <TouchableOpacity
+              onPress={() => this.setState({ modal: true })}
+              style={styles.bottomButtons}
             >
-              Check Availability
-            </Animatable.Text>
-          </TouchableOpacity>
+              <Animatable.Text
+                animation="bounceIn"
+                delay={2000}
+                useNativeDriver={true}
+                style={{ textAlign: "center", fontSize: 20 }}
+              >
+                Check Availability
+              </Animatable.Text>
+            </TouchableOpacity>
+          ) : null}
         </Animatable.View>
       </View>
     );

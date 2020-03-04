@@ -1,3 +1,83 @@
+import React, { Component } from 'react';
+import { StackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator } from "react-navigation-stack";
+
+import EventListing from './eventServices/List';
+import EventMap from './eventServices/Map';
+import EventDetail from './eventServices/Detail';
+import EventFilter from './eventServices/Filter';
+import EventAvailability from './eventServices/Availability';
+
+
+import List from './List';
+import MapListing from './MapView';
+import ListView from './ListView';
+import infinit from './infinit';
+import Comments from './Comments';
+import Details from './Details';
+import Availability from './Availability';
+import Provider from './Provider';
+import ProviderHome from './ProviderHome';
+
+
+import Main from './Main';
+// import EventServices from './app/screens/Listing/eventServices/Index';
+
+const Navigator = createStackNavigator({
+    Main: { screen: Main },
+    // Insta: { screen: Insta },
+    // Airbnb: { screen: Airbnb },
+    // Snapchat: { screen: Snapchat },
+    // // Thing: { screen: Thing },
+    // PanHandler: { screen: PanHandler },
+    // Day: { screen: Day },
+    // Uber: { screen: Uber },
+    EventListing: { screen: EventListing },
+    EventMap: { screen: EventMap, navigationOptions: { tabBarVisible: false } },
+    EventDetail: { screen: EventDetail, navigationOptions: { tabBarVisible: false } },
+    EventFilter: { screen: EventFilter },
+    EventAvailability: { screen: EventAvailability },
+    
+
+    List: { screen: List },
+    Infinit: { screen: infinit },
+    // MapListing: { screen: MapListing },
+    ListView: { screen: ListView },
+    Comments: { screen: Comments },
+    Availability: { screen: Availability },
+    Details: { screen: Details },
+    Provider: { screen: Provider },
+    ProviderHome: { screen: ProviderHome },
+},
+
+
+  {
+    initialRouteName: 'ProviderHome',
+    // defaultNavigationOptions: {
+    //   headerStyle: {
+    //     backgroundColor: '#f4511e',
+    //   },
+    //   headerTintColor: '#fff',
+    //   headerTitleStyle: {
+    //     fontWeight: 'bold',
+    //   },
+    // },
+    // defaultNavigationOptions: {
+    //   gesturesEnabled: true,
+    // },
+    headerMode: 'none'
+  }
+);
+
+const AppContainer = createAppContainer(Navigator)
+
+export default class Nav extends Component {
+  render() {
+    return <AppContainer />;
+  }
+} 
+
+
 // import React, {Component} from 'react';
 // import {
 //     View,
@@ -468,64 +548,64 @@
 
 // export default HomeTransitions;
 
-import React, { Component } from 'react';
-import { StackNavigator, createAppContainer } from 'react-navigation';
-import { createStackNavigator } from "react-navigation-stack";
+// import React, { Component } from 'react';
+// import { StackNavigator, createAppContainer } from 'react-navigation';
+// import { createStackNavigator } from "react-navigation-stack";
 
-import List from './List';
-import MapListing from './MapView';
-import ListView from './ListView';
-import infinit from './infinit';
-import Comments from './Comments';
-import Details from './Details';
-import Availability from './Availability';
-import Provider from './Provider';
-import ProviderHome from './ProviderHome';
-
-
-import Main from './Main';
-import EventServices from './eventServices/Index';
-
-const Navigator = createStackNavigator({
-    Main: { screen: Main },
-    Events: { screen: EventServices },
-    List: { screen: List },
-    Infinit: { screen: infinit },
-    MapListing: { screen: MapListing },
-    ListView: { screen: ListView },
-    Comments: { screen: Comments },
-    Availability: { screen: Availability },
-    Details: { screen: Details },
-    Provider: { screen: Provider },
-    ProviderHome: { screen: ProviderHome },
-},
+// import List from './List';
+// import MapListing from './MapView';
+// import ListView from './ListView';
+// import infinit from './infinit';
+// import Comments from './Comments';
+// import Details from './Details';
+// import Availability from './Availability';
+// import Provider from './Provider';
+// import ProviderHome from './ProviderHome';
 
 
-  {
-    initialRouteName: 'Main',
-    // defaultNavigationOptions: {
-    //   headerStyle: {
-    //     backgroundColor: '#f4511e',
-    //   },
-    //   headerTintColor: '#fff',
-    //   headerTitleStyle: {
-    //     fontWeight: 'bold',
-    //   },
-    // },
-    // defaultNavigationOptions: {
-    //   gesturesEnabled: true,
-    // },
-    headerMode: 'none'
-  }
-);
+// import Main from './Main';
+// import EventServices from './eventServices/Index';
 
-const AppContainer = createAppContainer(Navigator)
+// const Navigator = createStackNavigator({
+//     Main: { screen: Main },
+//     Events: { screen: EventServices },
+//     List: { screen: List },
+//     Infinit: { screen: infinit },
+//     MapListing: { screen: MapListing },
+//     ListView: { screen: ListView },
+//     Comments: { screen: Comments },
+//     Availability: { screen: Availability },
+//     Details: { screen: Details },
+//     Provider: { screen: Provider },
+//     ProviderHome: { screen: ProviderHome },
+// },
 
-export default class Nav extends Component {
-  render() {
-    return <AppContainer />;
-  }
-} 
+
+//   {
+//     initialRouteName: 'Main',
+//     // defaultNavigationOptions: {
+//     //   headerStyle: {
+//     //     backgroundColor: '#f4511e',
+//     //   },
+//     //   headerTintColor: '#fff',
+//     //   headerTitleStyle: {
+//     //     fontWeight: 'bold',
+//     //   },
+//     // },
+//     // defaultNavigationOptions: {
+//     //   gesturesEnabled: true,
+//     // },
+//     headerMode: 'none'
+//   }
+// );
+
+// const AppContainer = createAppContainer(Navigator)
+
+// export default class Nav extends Component {
+//   render() {
+//     return <AppContainer />;
+//   }
+// } 
 
 
 

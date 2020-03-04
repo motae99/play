@@ -65,6 +65,35 @@ export default class InfiniteScroll extends React.Component {
       });
       // console.log('Retrieving Data');
       // Cloud Firestore: Query
+
+
+      // var query = api.firestore().collection('posts')
+      // if (your_condition_is_true) {  // you decide
+      //   query = query.where('status', '==', 'published')
+      // }
+      // const questions = await query.get()
+      //   .then(snapshot => {
+      //     snapshot.forEach(doc => {
+      //       console.log(doc.data())
+      //     })
+      //   })
+      //   .catch(catchError)
+
+
+      //   let query = firebase.firestore().collection("ItemData");
+      //   if (type) {
+      //       query = query.where('type', '==', type);
+      //   }
+
+      //   if (currency) {
+      //       query = query.where('currency', '==', currency);
+      //   }
+
+      //   if (location) {
+      //       query = query.where('location', '==', location);
+      //   }
+
+
       let initialQuery = await firestore()
         .collection('partyHalls')
         .orderBy('timestamp', 'asc')
@@ -97,6 +126,7 @@ export default class InfiniteScroll extends React.Component {
       console.log(error);
     }
   };
+  
   // Retrieve More
   retrieveMore = async () => {
     var {lastVisible} = this.state

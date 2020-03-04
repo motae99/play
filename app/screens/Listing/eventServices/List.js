@@ -30,7 +30,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  StatusBar
 } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -67,6 +68,7 @@ export default class Listing extends React.Component {
     } catch (error) {
       console.log(error);
     }
+    console.log(StatusBar.currentHeight)
   };
   // Retrieve Data
   retrieveData = async () => {

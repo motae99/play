@@ -10,16 +10,16 @@ import {
 } from "react-native";
 
 import firestore from "@react-native-firebase/firestore";
-import { NavigationContext } from 'react-navigation';
 import { ScrollView } from "react-native-gesture-handler";
 
 const { width, height } = Dimensions.get("window");
 
-export default function Services({ providerData }) {
+export default function Services({ providerData, choosen }) {
   const data = providerData;
-  const navigation = useContext(NavigationContext);
+  // const navigation = useContext(NavigationContext);
   // console.log('Im logging', navigation.props)
   const [services, setServices] = useState([]);
+  const [choices, setChoices] = useState([]);
   const [serviceLoading, setServiceLoading] = useState(true);
 
   useEffect(() => {
@@ -65,21 +65,64 @@ export default function Services({ providerData }) {
     return () => unsubscribe();
   }, []);
 
+  const userSelection = (service, i, items, index) => {
+    
+    // use this for radio selection
+    if(services[index].data.length > 1){
+      services[index].data.forEach(item => {
+        item.selected = false
 
-  function Item({ item }) {
+      });
+    }
+    service.selected = !service.selected
+
+    // just ignore if user can select multible services
+    
+
+    // service.selected = !service.selected
+
+    const newService = services.map(s =>
+      s.key === service.key ? { ...s, selected: service.selected } : s
+    );
+
+    const newChoices = choices.map( choice => 
+      (service.selected) ? { ...choices, service} : choice
+    );
+
+
+    // const choosen = services[index].data.filter(service => service.selected)
+    // if(service.selected){
+    //   choices[service.name] = service
+    // }
+   
+    setChoices(newChoices)
+    // choices[service.key] = service;
+    // choices.push('service')
+    // 
+
+
+    setServices(newService)
+    // choosen(service);
+    console.log(choices)
+
+  }
+
+  function Item({ index, item }) {
+    // console.log(index)
     var name = item.key
       var data = item.data
       var length = data.length
-  
+    // console.log(item)
+
       return(
-        <View>
+        <View key={item.key}>
           <Text style={styles.header}>header {item.key}</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {
-              data.map(service => {
+              data.map((service, i) => {
                 return (
-                  <TouchableOpacity onPress={ () => console.log("select :",name,"service :",service) }> 
-                  <View style={[styles.item, styles.selected]}>
+                  <TouchableOpacity key={i.toString()} onPress={ () => userSelection(service, i, item, index) }> 
+                  <View style={[styles.item, service.selected ? styles.selected : null]}>
                     <Text>{service.data.price}</Text>
                     <Text>{service.data.desc}</Text>
                     <Text>{service.data.icon}</Text>
@@ -101,7 +144,7 @@ export default function Services({ providerData }) {
   return (
     <View>
     
-    { services.map( (item) => { return(<Item item={item}/> ); } ) }
+    { services.map( (item, i) => { return(<Item index={i} item={item}/> ); } ) }
     
     </View>
   )
@@ -122,6 +165,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+  },
+  selected: {
+    backgroundColor: 'green',
   },
 });
 

@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react'
 import {
     View, Text, StyleSheet, ScrollView, Alert,
     Image, TouchableOpacity, NativeModules, Dimensions, TextInput,
-    PermissionsAndroid, Platform, ToastAndroid, 
-  Modal
+    PermissionsAndroid, Platform, ToastAndroid,
   } from 'react-native';
 
 import Geolocation from 'react-native-geolocation-service';
@@ -18,7 +17,6 @@ import * as Yup from 'yup'
 import FormInput from '../../components/FormInput'
 import FormButton from '../../components/FormButton'
 import ErrorMessage from '../../components/ErrorMessage'
-import Address from '../../components/Address'
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -39,18 +37,6 @@ const validationSchema = Yup.object().shape({
         .label('Full address')
         .required()
         .min(10, 'Must have at least 10 characters'),
-    photographing: Yup.number()
-        .label('Photographing Price')
-        .min(100)
-        .max(10000),
-    weddingStage: Yup.number()
-        .label('weddingStage Price')
-        .min(100)
-        .max(10000),
-    videoShooting: Yup.number()
-        .label('videoShooting Price')
-        .min(100)
-        .max(10000),
     hallRenting: Yup.number()
         .label('hallRenting Price')
         .required()
@@ -61,16 +47,6 @@ const validationSchema = Yup.object().shape({
         .required('Cabacity of your place')
         .min(50)
         .max(1000),
-    CateringPrice: Yup.number()
-        .label('CateringPrice Price')
-        .min(10)
-        .max(10000),
-    night: Yup.boolean()
-        .oneOf([true], 'Please check Night Time')
-        .label('Night Time'),
-    day: Yup.boolean()
-        .oneOf([true], 'Please check Day Time')
-        .label('Day time'),
     contactNo: Yup.string()
         .label('contact No')
         .required('Plaese submit comtact info')
@@ -89,7 +65,6 @@ export default class ProviderHome extends React.Component {
         super();
         this.state = {
             currentUser: auth().currentUser,
-            modal: false,
             images: null,
             remoteUris: [],
             uploadingProg: null,
@@ -198,15 +173,9 @@ export default class ProviderHome extends React.Component {
     const { 
             partyHallName, 
             address, 
-            photographing, 
-            weddingStage, 
-            videoShooting, 
             hallRenting, 
             cabacity, 
-            CateringPrice, 
             contactNo, 
-            day, 
-            night,
             email, 
         } = values
     try {
@@ -261,15 +230,9 @@ export default class ProviderHome extends React.Component {
                 timestamp: Date.now(),
                 partyHallName, 
                 address, 
-                photographing, 
-                weddingStage, 
-                videoShooting, 
                 hallRenting, 
                 cabacity, 
-                CateringPrice, 
                 contactNo, 
-                day, 
-                night,
                 email,
                 files: this.state.images,
                 coords: this.state.geoPoint,
@@ -436,54 +399,18 @@ export default class ProviderHome extends React.Component {
         }
     };
 
-    handleAddress(address){
-        this.setState({
-            address: address.address,
-            latitude: address.latitude,
-            longitude: address.longitude,
-            latitudeDelta: address.latitudeDelta,
-            longitudeDelta: address.longitudeDelta
-        })
-    } 
-
-    renderModal() {
-        return (
-          <Modal
-            animationType={"slide"}
-            transparent={false}
-            visible={this.state.modal}
-            onRequestClose={() => this.setState({ modal: false })}
-          >
-            <Address
-              closeModal={() => this.setState({ modal: false })}
-              notifyChange={ (address) => {this.handleAddress(address) }}
-            />
-          </Modal>
-        );
-      }
-
     render() {
         // console.log(auth().currentUser)
-        
         return (
-            
             <ScrollView >   
                 <Formik
                     initialValues={{
                         partyHallName: '',
                         address: '',
-                        photographing: '',
-                        weddingStage: '',
-                        videoShooting: '',
                         hallRenting: '',
                         cabacity: '',
-                        CateringPrice: '',
                         contactNo: '',
-                        day: false,
-                        night: false,
                         email: '',
-                        password: '',
-                        confirmPassword: '',
                         check: false
                     }}
                     onSubmit={(values, actions) => {
@@ -513,15 +440,9 @@ export default class ProviderHome extends React.Component {
                         onBlur={handleBlur('partyHallName')}
                     />
                     <ErrorMessage errorValue={touched.partyHallName && errors.partyHallName} />
-                    {this.renderModal()}
-                    <TouchableOpacity
-                        onPress={() => this.setState({ modal: true })}
-                    >
-                        <Text> Check Address </Text> 
-                    </TouchableOpacity>
                     <FormInput
                         name='address'
-                        value={this.state.address ? this.state.address : values.address}
+                        value={values.address}
                         onChangeText={handleChange('address')}
                         placeholder='Enter your address'
                         iconName='md-person'
@@ -529,7 +450,6 @@ export default class ProviderHome extends React.Component {
                         onBlur={handleBlur('address')}
                     />
                     <ErrorMessage errorValue={touched.address && errors.address} />
-
                     <FormInput
                         name='contactNo'
                         value={values.contactNo}
@@ -574,71 +494,7 @@ export default class ProviderHome extends React.Component {
                         onBlur={handleBlur('cabacity')}
                     />
                     <ErrorMessage errorValue={touched.cabacity && errors.cabacity} />
-                    <FormInput
-                        name='photographing'
-                        value={values.photographing}
-                        onChangeText={handleChange('photographing')}
-                        keyboardType={'numeric'}
-                        placeholder='Enter photographing Price if Available'
-                        iconName='md-person'
-                        iconColor='#2C384A'
-                        onBlur={handleBlur('photographing')}
-                    />
-                    <ErrorMessage errorValue={touched.photographing && errors.photographing} />
-                    <FormInput
-                        name='weddingStage'
-                        value={values.weddingStage}
-                        onChangeText={handleChange('weddingStage')}
-                        keyboardType={'numeric'}
-                        placeholder='Enter weddingStage Price if Available'
-                        iconName='md-person'
-                        iconColor='#2C384A'
-                        onBlur={handleBlur('weddingStage')}
-                    />
-                    <ErrorMessage errorValue={touched.weddingStage && errors.weddingStage} />
-                    <FormInput
-                        name='videoShooting'
-                        value={values.videoShooting}
-                        onChangeText={handleChange('videoShooting')}
-                        keyboardType={'numeric'}
-                        placeholder='Enter videoShooting Price if Available'
-                        iconName='md-person'
-                        iconColor='#2C384A'
-                        onBlur={handleBlur('videoShooting')}
-                    />
-                    <ErrorMessage errorValue={touched.videoShooting && errors.videoShooting} />
-
-                    <FormInput
-                        name='CateringPrice'
-                        value={values.CateringPrice}
-                        onChangeText={handleChange('CateringPrice')}
-                        keyboardType={'numeric'}
-                        placeholder='Enter your CateringPrice'
-                        iconName='md-person'
-                        iconColor='#2C384A'
-                        onBlur={handleBlur('CateringPrice')}
-                    />
-                    <ErrorMessage errorValue={touched.CateringPrice && errors.CateringPrice} />
-                    <CheckBox
-                        containerStyle={styles.checkBoxContainer}
-                        checkedIcon='check-box'
-                        iconType='material'
-                        uncheckedIcon='check-box-outline-blank'
-                        title='Do you have Day time service'
-                        checkedTitle='You Do'
-                        checked={values.day}
-                        onPress={() => setFieldValue('day', !values.day)}
-                    />
-                    <CheckBox
-                        containerStyle={styles.checkBoxContainer}
-                        checkedIcon='check-box'
-                        iconType='material'
-                        uncheckedIcon='check-box-outline-blank'
-                        title='Do you have night time service'
-                        checkedTitle='You Do'
-                        checked={values.night}
-                        onPress={() => setFieldValue('night', !values.night)}
-                    />
+                    
 
                     <TouchableOpacity style={styles.photo} onPress={this.pickMultiple.bind(this)}>
                         <Icon name="rocket" size={32} color="#D8D9DB"></Icon>
@@ -672,10 +528,6 @@ export default class ProviderHome extends React.Component {
                         }
                         
                     </ScrollView>
-                    
-
-
-                    
                     <CheckBox
                         containerStyle={styles.checkBoxContainer}
                         checkedIcon='check-box'
@@ -763,274 +615,3 @@ const styles = StyleSheet.create({
     }
 });
 
-
-
-// import React, { Component } from 'react';
-
-// import { StyleSheet, Text, View } from 'react-native';
-
-// import * as Progress from 'react-native-progress';
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#fff',
-//     paddingVertical: 20,
-//   },
-//   welcome: {
-//     fontSize: 20,
-//     textAlign: 'center',
-//     margin: 10,
-//   },
-//   circles: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//   },
-//   progress: {
-//     // margin: 10,
-//     // position: "absolute",
-//     // top: 150,
-//     // right: 50
-//     // vertic
-//     // justifyContent: "center",
-//     // alignContent: "center",
-//     // alignItems: "center"
-//   },
-//   progressView: {
-//     // height: 300,
-//     // width: 300,
-//     // backgroundColor: 'green',
-//     // position: 'absolute',
-//     top: 0, 
-//     left: 0, 
-//     right: 0, 
-//     bottom: 0, 
-//     justifyContent: 'center', 
-//     alignItems: 'center'
-//   }
-// });
-
-// export default class Example extends Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       progress: 0,
-//       indeterminate: true,
-//     };
-//   }
-
-//   componentDidMount() {
-//     this.animate();
-//   }
-
-//   animate() {
-//     let progress = 0;
-//     this.setState({ progress });
-//     setTimeout(() => {
-//       this.setState({ indeterminate: false });
-//       setInterval(() => {
-//         progress += Math.random() / 5;
-//         if (progress > 1) {
-//           progress = 1;
-//         }
-//         this.setState({ progress });
-//       }, 500);
-//     }, 1500);
-//   }
-
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//           <View style={styles.progressView}>
-//             <Progress.Bar
-//             style={styles.progress}
-//             progress={this.state.progress}
-//             indeterminate={this.state.indeterminate}
-//             />
-//           </View>
-        
-//         <View style={styles.circles}>
-//           {/* <Progress.Circle
-//             style={styles.progress}
-//             progress={this.state.progress}
-//             indeterminate={this.state.indeterminate}
-//           />
-//           <Progress.Pie
-//             style={styles.progress}
-//             progress={this.state.progress}
-//             indeterminate={this.state.indeterminate}
-//           /> */}
-//           {/* <Progress.Circle
-//             style={styles.progress}
-//             progress={this.state.progress}
-//             indeterminate={this.state.indeterminate}
-//             direction="counter-clockwise"
-//           /> */}
-//         </View>
-//         <View style={styles.circles}>
-//           {/* <Progress.CircleSnail style={styles.progress} />
-//           <Progress.CircleSnail
-//             style={styles.progress}
-//             color={['#F44336', '#2196F3', '#009688']}
-//           /> */}
-//         </View>
-//       </View>
-//     );
-//   }
-// }
-
-
-// /*Example to Scroll to a specific position in scrollview*/
-// import React, { Component } from 'react';
-// //import react in our project
- 
-// import {
-//   View,
-//   ScrollView,
-//   StyleSheet,
-//   Text,
-//   TouchableOpacity,
-//   Image,
-//   TextInput,
-// } from 'react-native';
-// //import all the components we needed
- 
-// export default class App extends Component {
-//   constructor() {
-//     super();
-//     //Array of Item to add in Scrollview
-//     this.items = [
-//       'zero',
-//       'one',
-//       'two',
-//       'three',
-//       'four',
-//       'five',
-//       'six',
-//       'seven',
-//       'eight',
-//       'nine',
-//       'ten ',
-//       'eleven',
-//       'twelve',
-//       'thirteen',
-//       'fourteen',
-//       'fifteen',
-//       'sixteen',
-//       'seventeen',
-//       'eighteen',
-//       'nineteen',
-//       'twenty ',
-//       'twenty-one',
-//       'twenty-two',
-//       'twenty-three',
-//       'twenty-four',
-//       'twenty-five',
-//       'twenty-six',
-//       'twenty-seven',
-//       'twenty-eight',
-//       'twenty-nine',
-//       'thirty',
-//       'thirty-one',
-//       'thirty-two',
-//       'thirty-three',
-//       'thirty-four',
-//       'thirty-five',
-//       'thirty-six',
-//       'thirty-seven',
-//       'thirty-eight',
-//       'thirty-nine',
-//       'forty',
-//     ];
-//     //Blank array to store the location of each item
-//     this.arr = [];
-//     this.state = { dynamicIndex: 5 };
-//   }
-//   downButtonHandler = () => {
-//     if (this.arr.length >= this.state.dynamicIndex) {
-//       // To Scroll to the index 5 element
-//       this.scrollview_ref.scrollTo({
-//         x: 0,
-//         y: this.arr[this.state.dynamicIndex],
-//         animated: true,
-//       });
-//     } else {
-//       alert('Out of Max Index');
-//     }
-//   };
-
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <View
-//           style={{
-//             flexDirection: 'row',
-//             backgroundColor: '#1e73be',
-//             padding: 5,
-//           }}>
-//           <TextInput
-//             value={String(this.state.dynamicIndex)}
-//             numericvalue
-//             keyboardType={'numeric'}
-//             onChangeText={dynamicIndex => this.setState({ dynamicIndex })}
-//             placeholder={'Enter the index to scroll'}
-//             style={{ flex: 1, backgroundColor: 'white', padding: 10 }}
-//           />
-//           <TouchableOpacity
-//             activeOpacity={0.5}
-//             onPress={this.downButtonHandler}
-//             style={{ padding: 15, backgroundColor: '#f4801e' }}>
-//             <Text style={{ color: '#fff' }}>Go to Index</Text>
-//           </TouchableOpacity>
-//         </View>
-//         <ScrollView
-//           ref={ref => {
-//             this.scrollview_ref = ref;
-//           }}>
-//           {/*Loop of JS which is like foreach loop*/}
-//           {this.items.map((item, key) => (
-//             //key is the index of the array
-//             //item is the single item of the array
-//             <View
-//               key={key}
-//               style={styles.item}
-//               onLayout={event => {
-//                 const layout = event.nativeEvent.layout;
-//                 this.arr[key] = layout.y;
-//                 console.log('height:', layout.height);
-//                 console.log('width:', layout.width);
-//                 console.log('x:', layout.x);
-//                 console.log('y:', layout.y);
-//               }}>
-//               <Text style={styles.text}>
-//                 {key}. {item}
-//               </Text>
-//               <View style={styles.separator} />
-//             </View>
-//           ))}
-//         </ScrollView>
-//       </View>
-//     );
-//   }
-// }
- 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 30,
-//   },
-//   separator: {
-//     height: 1,
-//     backgroundColor: '#707080',
-//     width: '100%',
-//   },
- 
-//   text: {
-//     fontSize: 16,
-//     color: '#606070',
-//     padding: 10,
-//   },
-// });

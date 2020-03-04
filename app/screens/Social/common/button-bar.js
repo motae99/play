@@ -45,8 +45,6 @@ export default class ButtonBar extends Component {
         if(this.state.animating) {
             return;
         }
-        // console.log('animating hide button bar');
-
         this.setState({animating: true});
         Animated.timing(
             this.state.height,
@@ -81,8 +79,6 @@ export default class ButtonBar extends Component {
 
     getStyle() {
         const {height} = this.state;
-
-
         return {height, opacity: height.interpolate({
             inputRange: [0, 36],
             outputRange: [0, 1],

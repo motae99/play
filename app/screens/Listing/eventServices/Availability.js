@@ -211,6 +211,15 @@ export default class AgendaScreen extends React.Component {
       // this.setState({message: childData})
   }
 
+  booking(){
+    this.props.selected({data: {date: this.state.date, time: this.state.time}});
+  }
+  handleSelection = () => {
+    var data = {date: this.state.date, time: this.state.time};
+    this.props.onTimeSelected(data); 
+    this.props.closeModal();           
+}
+
   render() {
     const today = new Date(); 
 
@@ -242,7 +251,8 @@ export default class AgendaScreen extends React.Component {
           <View style= {styles.bottomButtons}>
             <Text>Selected Date: {this.state.date} at {this.state.time}</Text>
             <TouchableOpacity 
-            onPress={ () => this.props.navigation.navigate('EventDetail', {selected: {date: this.state.date, time: this.state.time} } )}
+            onPress={this.handleSelection}
+            // onPress={ () => this.props.navigation.navigate('EventDetail', {selected: {date: this.state.date, time: this.state.time} } )}
             >
               
             <Text> Confirm </Text>

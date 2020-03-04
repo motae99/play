@@ -13,7 +13,7 @@ import Swiper from "react-native-swiper";
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: "100%"
+    height: "100%",
   },
   dots:{
    backgroundColor: "rgba(255,255,255,.3)",
