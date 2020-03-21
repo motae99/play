@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   Text,
   View,
@@ -8,54 +8,6 @@ import {
   ScrollView
 } from "react-native";
 
-// class CLview extends React.PureComponent {
-//   constructor(props) {
-//     super(props);
-//     this.state = {};
-//   }
-//   render() {
-//     return (
-//       <View>
-//         <Text>t</Text>
-//       </View>
-//     );
-//   }
-// }
-
-// export default CLview;
-
-class CLview extends React.PureComponent {
-  state = {};
-
-  sendData = (date, time) => {
-    this.props.parentCallback(date, time);
-  }
-
-  render() {
-    const { data } = this.props;
-
-    const date = data.date;
-    const schedule = data.schedule;
-    return (
-      <ScrollView key={data.key} style={styles.date}>
-        {data.schedule.map((time, i) => {
-          return (
-            <TouchableOpacity
-              key={i}
-              onPress={() => {
-                this.sendData(date, time)
-              }}
-            >
-              <View style={styles.row}>
-                <Text> {time}</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   row: {
@@ -76,4 +28,33 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CLview;
+
+export default memo(({data, parentCallback}) => {
+
+  sendData = (date, time) => {
+    // console.log(date, time);
+    parentCallback(date, time);
+  }
+
+
+    const date = data.date;
+    const schedule = data.schedule;
+    return (
+      <ScrollView key={data.key} style={styles.date}>
+        {data.schedule.map((time, i) => {
+          return (
+            <TouchableOpacity
+              key={i}
+              onPress={() => {
+                sendData(date, time)
+              }}
+            >
+              <View style={styles.row}>
+                <Text> {time}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    );
+})

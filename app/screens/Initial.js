@@ -6,6 +6,7 @@ import messaging from '@react-native-firebase/messaging';
 import firestore from "@react-native-firebase/firestore";
 import AsyncStorage from '@react-native-community/async-storage';
 
+// import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 // function onMessageReceived(message) {
 //   console.log('message not ready shipped for testing')
@@ -23,7 +24,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 // }
 
 
-
+// async function bootstrapApp() {
+//   const initialLink = await dynamicLinks().getInitialLink();
+//   if (initialLink) {
+//     if (initialLink.url === 'https://www.example.com/?curPage=1') {
+//       console.log('link Recieved navigate now')
+//     }
+//   }
+// }
 
 export default class Initial extends Component {
   constructor() {
@@ -35,7 +43,9 @@ componentDidMount = async () => {
    const user = await auth().currentUser;
     if (user) {
       if(!user.phoneNumber){
-        this.props.navigation.navigate('Phone')
+        // this.props.navigation.navigate('Phone')
+        this.props.navigation.navigate('App')
+
       }
       if(user.phoneNumber){
         // await messaging().registerForRemoteNotifications();
@@ -51,14 +61,14 @@ componentDidMount = async () => {
         this.props.navigation.navigate('App')
       }
 
-        
     } else {
       console.log('No logged in User navigate to Auth')
 
       // if the user has previously signed out from the app
-      this.props.navigation.navigate('App')
+      this.props.navigation.navigate('Auth')
     }
 
+    // bootstrapApp();
 
 
 }

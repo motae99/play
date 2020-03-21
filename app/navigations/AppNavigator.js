@@ -1,8 +1,12 @@
-import React from "react";
+import React, { Component, memo } from "react";
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
+
+
 import IonIcon from "react-native-vector-icons/Ionicons";
+import Feather from "react-native-vector-icons/Feather";
 
 import HomeScreen from "../screens/HomeScreen";
 import PostScreen from "../screens/PostScreen";
@@ -10,16 +14,22 @@ import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import CommentScreen from "../screens/CommentScreen";
 import Listing from "../screens/Listing/Main";
-import EListing from "../screens/Listing/eventServices/List";
+import EventListing from "../screens/Listing/eventServices/List";
 import EventDetail from "../screens/Listing/eventServices/Detail";
 import EventMap from "../screens/Listing/eventServices/Map";
 
 import UserStack from "../screens/Profile/Index";
+import UserProfile from "../screens/Profile/UserProfile";
 import Offers from "../screens/Offers/OfferLanding";
 // import OfferStack from "../screens/Offers/Index";
 import SocialStack from "../screens/Social/Index";
 
 import Provider from "../screens/Listing/ProviderHome"
+import AddEvent from "../screens/Admin/AddEvent"
+import AddService from "../screens/Admin/Service"
+import AddSub from "../screens/Admin/SubService"
+import Booking from "../screens/Admin/Booking"
+import AdminBooking from "../screens/Admin/AdminBooking"
 
 import AddEventProvider from "../screens/Admin/Add";
 import AddEventServices from "../screens/Admin/Services";
@@ -27,7 +37,6 @@ import Files from "../screens/Admin/Files";
 import Reservations from "../screens/Admin/Reservations";
 
 import { AnimatedCircleBarComponent } from 'react-navigation-custom-bottom-tab-component/AnimatedCircleBarComponent';
-
 // const Navigation = createBottomTabNavigator(
 //   {
 //     UserStack,
@@ -40,59 +49,124 @@ import { AnimatedCircleBarComponent } from 'react-navigation-custom-bottom-tab-c
 //   },
 // );
 // export default Navigation;
+
+
+
+const ListingStack = createSharedElementStackNavigator(
+  {
+    Listing: Listing,
+    EventListing: EventListing,
+    EventDetail: EventDetail,
+    EventMap: EventMap
+  },
+  {
+    initialRouteName: 'Listing',
+    headerMode: "none",
+  }
+);
+
+ListingStack.navigationOptions = ({ navigation }) => {
+  // return tabBarIcon = ({ tintColor }) => (
+  //   <Feather name="list" size={24} color={tintColor} />
+  // )
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible,
+  };
+};
+
 const AppNavigation = createStackNavigator(
   {
     default: createBottomTabNavigator(
       {
-        Offers: {
-          screen: Offers,
+        // Offers: {
+        //   screen: Offers,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-chatboxes" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
+        EListing: {
+          screen: ListingStack,
           navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-chatboxes" size={24} color={tintColor} />
+              <Feather name="list" size={24} color={tintColor} />
             )
           }
         },
-        Listing: {
-          screen: Listing,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-map" size={24} color={tintColor} />
-            )
-          }
-        },
-        Provider: {
-          screen: Provider,
+        // Provider: {
+        //   screen: Provider,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
+        AddEvent: {
+          screen: AddEvent,
           navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
               <IonIcon name="ios-notifications" size={24} color={tintColor} />
             )
           }
         },
-        // User: {
-        //   screen: UserStack,
-        //   navigationOptions: {
-        //     tabBarIcon: ({ tintColor }) => (
-        //       <IonIcon name="ios-person" size={24} color={tintColor} />
-        //     )
-        //   }
-        // },
-        
-        Home: {
-          screen: HomeScreen,
+
+        AddService: {
+          screen: AddService,
+          navigationOptions: {
+            tabBarIcon: ({ tintColor }) => (
+              <IonIcon name="ios-notifications" size={24} color={tintColor} />
+            )
+          }
+        },
+
+        AddSub: {
+          screen: AddSub,
+          navigationOptions: {
+            tabBarIcon: ({ tintColor }) => (
+              <IonIcon name="ios-notifications" size={24} color={tintColor} />
+            )
+          }
+        },
+       
+        Booking: {
+          screen: Booking,
           navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
               <IonIcon name="ios-home" size={24} color={tintColor} />
             )
           }
         },
-        Files: {
-          screen: Files,
+        AdminBooking: {
+          screen: AdminBooking,
           navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-notifications" size={24} color={tintColor} />
+              <IonIcon name="ios-home" size={24} color={tintColor} />
             )
           }
         },
+        // Files: {
+        //   screen: Files,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
+        User: {
+          screen: UserProfile,
+          navigationOptions: {
+            tabBarIcon: ({ tintColor }) => (
+              <IonIcon name="ios-person" size={24} color={tintColor} />
+            )
+          }
+        },
+        
         // Add: {
         //   screen: AddEventProvider,
         //   navigationOptions: {
@@ -169,6 +243,7 @@ const AppNavigation = createStackNavigator(
             } else {
               defaultHandler();
             }
+            
           }
         },
         tabBarOptions: {
@@ -178,24 +253,15 @@ const AppNavigation = createStackNavigator(
         }
       }
     ),
-    // postModal: {
-    //   screen: PostScreen
-    // },
-    EventListing: {
-      screen: EListing
-    },
-    EventDetail: {
-      screen: EventDetail
-    },
-    EventMap: {
-      screen: EventMap
-    },
+
   },
   {
-    mode: "modal",
+    // mode: "modal",
     headerMode: "none",
-    // initialRouteName: "Files"
+    // initialRouteName: "EListing"
   }
 );
+
+
 
 export default AppNavigation;

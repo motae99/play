@@ -4,6 +4,7 @@ import AuthNavigation from './AuthNavigator'
 import AppNavigation from './AppNavigator'
 
 
+
 const SwitchNavigator = createSwitchNavigator(
   {
     Initial: Initial,
@@ -11,7 +12,7 @@ const SwitchNavigator = createSwitchNavigator(
     App: AppNavigation,
   },
   {
-    initialRouteName: 'App'
+    initialRouteName: 'Initial'
   }
 )
 

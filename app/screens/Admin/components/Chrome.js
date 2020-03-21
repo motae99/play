@@ -4,6 +4,9 @@ import Animated from "react-native-reanimated";
 import { TAB_COLUMNS, TAB_SIZE, tabs } from "./Tab";
 import SortableTab from "./SortableTab";
 
+import { useNavigation } from "react-navigation-hooks";
+
+
 const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
@@ -20,11 +23,18 @@ const styles = StyleSheet.create({
     color: "white"
   }
 });
+
+
+
 export default () => {
   const offsets = tabs.map((_, index) => ({
     x: new Value(index % TAB_COLUMNS === 0 ? 0 : TAB_SIZE),
     y: new Value(Math.floor(index / TAB_COLUMNS) * TAB_SIZE)
   }));
+
+  // const { goBack, getParam, navigate } = useNavigation();
+  // const [files, setFiles] = useState(getParam("data"));
+
   return (
     <View style={styles.container}>
       {tabs.map((tab, index) => (

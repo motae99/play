@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
+  Text,
   Dimensions,
   TouchableOpacity,
   ActivityIndicator
@@ -13,7 +14,7 @@ import Swiper from "react-native-swiper";
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: "100%",
+    // flex: 1,
   },
   dots:{
    backgroundColor: "rgba(255,255,255,.3)",
@@ -50,43 +51,53 @@ const styles = StyleSheet.create({
 
 export default function Swipe({swipeData, autoPlay=false, minimal=false}) {
  const data = swipeData;
-
   return (
-    <Swiper
-      style={styles.wrapper}
-      dot={
-        <View
-          style={styles.dots }
-        />
-      }
-      activeDot={
-        <View
-          style={styles.activeDot}
-        />
-      }
-      paginationStyle={{
-        bottom: 20
-      }}
-      loop={true}
-      autoplay={autoPlay}
-      loadMinimal={minimal}
-      // loadMinimalLoader= {()=> <ActivityIndicator/>}
-    >
-      {data.files.map((image, key) => (
-        <View key={key} style={styles.slide}>
-          <FastImage
-            style={styles.image}
-            source={{
-              uri: image.uri,
-              priority: FastImage.priority.normal,
-              cashe: FastImage.cacheControl.immutable
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
+    <View> 
+      <FastImage
+        style={styles.image}
+        source={{
+          uri: data.files[0].uri,
+          priority: FastImage.priority.normal,
+          cashe: FastImage.cacheControl.immutable
+        }}
+        resizeMode={FastImage.resizeMode.stretch}
+      />
+    </View>
+    // <Swiper
+    //   style={styles.wrapper}
+    //   dot={
+    //     <View
+    //       style={styles.dots }
+    //     />
+    //   }
+    //   activeDot={
+    //     <View
+    //       style={styles.activeDot}
+    //     />
+    //   }
+    //   paginationStyle={{
+    //     bottom: 20
+    //   }}
+    //   loop={true}
+    //   autoplay={autoPlay}
+    //   loadMinimal={minimal}
+    //   // loadMinimalLoader= {()=> <ActivityIndicator/>}
+    // >
+    //   {data.files.map((image, key) => (
+    //     <View key={key} style={styles.slide}>
+    //       <FastImage
+    //         style={styles.image}
+    //         source={{
+    //           uri: image.uri,
+    //           priority: FastImage.priority.normal,
+    //           cashe: FastImage.cacheControl.immutable
+    //         }}
+    //         resizeMode={FastImage.resizeMode.stretch}
+    //       />
           
           
-        </View>
-      ))}
-    </Swiper>
+    //     </View>
+    //   ))}
+    // </Swiper>
   );
 }

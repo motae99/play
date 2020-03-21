@@ -179,6 +179,7 @@ const UserContextProvider = props => {
 
   const updatePassword = async password => {
     try {
+      
       await auth().currentUser.updatePassword(password);
     } catch (error) {
       console.log(error);

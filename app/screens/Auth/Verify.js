@@ -155,11 +155,21 @@ export default class example extends Component {
                       phoneNumber: user.phoneNumber,
                       photoURL: user.photoURL,
                     };
-                  await firestore()
+                  try{
+                    await firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .update(userData)
+                    setTimeout(() => { this.props.navigation.navigate('Initial') }, 1000)
+                  }
+                  catch(error){
+                    await firestore()
                     .collection('users')
                     .doc(user.uid)
                     .set(userData)
-                  setTimeout(() => { this.props.navigation.navigate('Initial') }, 1000)
+                    setTimeout(() => { this.props.navigation.navigate('Initial') }, 1000)
+                  }
+                  
 
                 }
               });
