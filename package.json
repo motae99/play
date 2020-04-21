@@ -81,6 +81,7 @@
     "react-native-image-zoom-viewer": "^2.2.27",
     "react-native-indicator": "^1.2.0",
     "react-native-keep-awake": "^4.0.0",
+    "react-native-ken-burns": "^4.0.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-location-view": "^0.3.0",

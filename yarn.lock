@@ -2345,7 +2345,7 @@ cosmiconfig@^5.0.5, cosmiconfig@^5.1.0:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
-create-react-class@^15.6.0, create-react-class@^15.6.3:
+create-react-class@^15.5.2, create-react-class@^15.6.0, create-react-class@^15.6.3:
   version "15.6.3"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   integrity sha512-M+/3Q6E6DLO6Yx3OwrWjwHBnvfXXYA7W+dFjt/ZDBemHO1DDZhsalX/NUtnTYclN6GfnBDRh4qRHjcDHmlJBJg==
@@ -6507,6 +6507,15 @@ react-native-keep-awake@^4.0.0:
   resolved "https://registry.yarnpkg.com/react-native-keep-awake/-/react-native-keep-awake-4.0.0.tgz#d89fdc3fb60b3cffa979ef37dc5816196df998a2"
   integrity sha512-0Fotox+eLXQooeibVs3P60yASYUWjtRw9MZNmbuHt5UZQrgUrAKsE4jm7gTr4tPU1m1RkwGzcgUFpcOkh/ec7g==
 
+react-native-ken-burns@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-ken-burns/-/react-native-ken-burns-4.0.1.tgz#33827a43d74060ad9b3a1b1bd95144d3236f6d95"
+  integrity sha512-00/YI/PTfCOvCnzmxp4bIBTAVUHJ9IsgjysgjgPmK7SMFDZQe2G+dFFv+4hSfDptleBzzNp8njohJKm1jqD9CA==
+  dependencies:
+    prop-types "^15.6.0"
+    react-timeout "^1.2.0"
+    rebound "^0.0.15"
+
 react-native-keyboard-aware-scroll-view@^0.9.1:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/react-native-keyboard-aware-scroll-view/-/react-native-keyboard-aware-scroll-view-0.9.1.tgz#9e54b565a5f19b30bed12221d48921781f7630af"
@@ -7011,6 +7020,15 @@ react-test-renderer@16.9.0:
     react-is "^16.9.0"
     scheduler "^0.15.0"
 
+react-timeout@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-timeout/-/react-timeout-1.2.0.tgz#7b5691cd6ab9f22773d82432f5707a00d601dafe"
+  integrity sha512-HJTmeeNsG3fHmnVkw8cCwAJNmcxf6H/A3vbiS9QKsfxMsgDtDK2oopeReMeLsH/TK1nq8BumL1yYVbcuOX8wGA==
+  dependencies:
+    create-react-class "^15.5.2"
+    hoist-non-react-statics "^2.3.1"
+    object-assign "^4.0.1"
+
 react@16.9.0:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.9.0.tgz#40ba2f9af13bc1a38d75dbf2f4359a5185c4f7aa"
@@ -7097,6 +7115,11 @@ reanimated-bottom-sheet@^1.0.0-alpha.19:
   version "1.0.0-alpha.19"
   resolved "https://registry.yarnpkg.com/reanimated-bottom-sheet/-/reanimated-bottom-sheet-1.0.0-alpha.19.tgz#94ea79e7b2896b8f489547415d15d15c99ac44ba"
   integrity sha512-Q0sGUHYdr5h2n/AY7pKQty35zcUAxxYM1nCl+luSQAyqiY6a5Kf8IBQRsOVvs60sDzqXxtbwxHgM5mkwaiQC4Q==
+
+rebound@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/rebound/-/rebound-0.0.15.tgz#b7796972cd3e6eca37fd1477217e64c77bb122de"
+  integrity sha1-t3lpcs0+bso3/RR3IX5kx3uxIt4=
 
 recompose@^0.30.0:
   version "0.30.0"
