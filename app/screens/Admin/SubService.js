@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useState } from "react";
+import React, { Fragment, memo, useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -83,18 +83,91 @@ const styles = StyleSheet.create({
 export default memo(() => {
   const [user, setUser] = useState(null);
   const [service, setService] = useState(null);
+  const [provider, setProvider] = useState(null);
   const [image, setImage] = useState(null);
   const [uploadingProg, setuploadingProg] = useState(false);
+  const [loadingServices, setLoading] = useState(true);
   const [percentage, setPercentage] = useState(null);
 
+  
   const getUser = async () => {
     let user =  await auth().currentUser;
+    let Services =  await firebase.firestore().collection("partyHalls").doc(user.uid).get()
+      if(Services.data()){
+        console.log(Services.data())
+        setProvider(Services.data())
+      }
+      else{
+        Alert.alert('you cant do that as this user ')
+      }
     setUser(user)
   }
+
   getUser()
 
-  console.log(user)
-  
+
+  // const getServices = async () => {
+  //   if(user){
+  //     let Services =  await firebase.firestore().collection("partyHalls").doc(user.uid).get()
+  //     if(Services.data()){
+  //       // console.log(Services.data().Services)
+  //       setProvider(Services.data())
+  //     }
+  //     else{
+  //       Alert.alert('you cant do that as this user ')
+  //     }
+
+  //   }
+  //   else{
+  //     console.log('no user ')
+  //   }
+    
+  // }
+
+
+  // getServices()
+
+  // useEffect( () => {
+  //   const getUser = async () => {
+  //     let User = await auth().currentUser;
+  //     console.log(User)
+  //     setUser(User)
+  //   }
+    
+  //   return () => getUser()
+  // }, []) 
+
+  // console.log(user)
+  // useEffect (() => {
+  //   // const unsubscribe = firebase
+  //   // .firestore()
+  //   // .collection("partyHalls")
+  //   // .doc(user.uid).onSnapshot((querySnapshot) => {
+  //   //   if(querySnapshot){ 
+  //   //     console.log(querySnapshot.data())
+  //   //     // const provider = querySnapshot.docs.map((documentSnapshot) => {
+  //   //     //   return {
+  //   //     //     ...documentSnapshot.data(),
+  //   //     //   };
+  //   //     // });
+
+  //   //     // console.log(provider)
+
+  //   //     if (loadingServices) {
+  //   //       setLoading(false);
+  //   //     }
+  //   //    }
+  //   //    });
+  //   console.log('user', user)
+
+  //   const unsubscribe = () => {
+  //     const data = firebase.firestore().collection("partyHalls").doc(user.uid).get()
+  //     console.log(data)
+  //   }
+  //     return () =>  unsubscribe(); 
+
+  // }, []) 
+
   const onServiceChange = (itemValue, itemIndex) => {
     // console.log(itemIndex, '<= index , value => ', itemValue)
     setService(itemValue);
@@ -201,7 +274,7 @@ export default memo(() => {
         await firebase
         .firestore()
         .collection("partyHalls")
-        .doc("24RcBl6iKMPJfJJAbzGE1K8jzKt2")
+        .doc(user.uid)
         .collection('services')
         .doc(`${service}`)
         .set({
@@ -271,6 +344,7 @@ export default memo(() => {
     );
   };
 
+  console.log(provider.services)
   return (
     <ScrollView style={{ marginTop: 50 }}>
       <Formik

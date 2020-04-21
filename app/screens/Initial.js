@@ -42,24 +42,26 @@ componentDidMount = async () => {
 
    const user = await auth().currentUser;
     if (user) {
-      if(!user.phoneNumber){
-        // this.props.navigation.navigate('Phone')
-        this.props.navigation.navigate('App')
+      this.props.navigation.navigate('App')
 
-      }
-      if(user.phoneNumber){
-        // await messaging().registerForRemoteNotifications();
-        // const fcmToken = await messaging().getToken();
-        // console.log(fcmToken)
-        // // Update backend (e.g. Firestore) with our scoped token for the user
-        // await firestore().doc(`users/${user.uid}`)
-        //   .update({
-        //     fcmTokens: fcmToken,
-        //   });
-        // await messaging().subscribeToTopic('test');
+      // if(!user.phoneNumber){
+      //   // this.props.navigation.navigate('Phone')
+      //   this.props.navigation.navigate('App')
 
-        this.props.navigation.navigate('App')
-      }
+      // }
+      // if(user.phoneNumber){
+      //   // await messaging().registerForRemoteNotifications();
+      //   // const fcmToken = await messaging().getToken();
+      //   // console.log(fcmToken)
+      //   // // Update backend (e.g. Firestore) with our scoped token for the user
+      //   // await firestore().doc(`users/${user.uid}`)
+      //   //   .update({
+      //   //     fcmTokens: fcmToken,
+      //   //   });
+      //   // await messaging().subscribeToTopic('test');
+
+      //   this.props.navigation.navigate('App')
+      // }
 
     } else {
       console.log('No logged in User navigate to Auth')

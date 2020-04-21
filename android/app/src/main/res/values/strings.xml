@@ -3,4 +3,11 @@
     <string name="facebook_app_id">2904503169599856</string>
     <string name="fb_login_protocol_scheme">fb2904503169599856</string>
     <string name="googe_map_api_key">AIzaSyAiJZomZxOvuedI5Q5bATkcH3FWsljlhdo</string>
+    <!-- CodePush -->
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">tgviw0osY4NNsdVbycpGokVlAAQnugw9oOp8A</string>
+
+    <!-- CodePush -->
+
 </resources>

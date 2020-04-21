@@ -132,8 +132,9 @@ export default class Login extends Component {
         this.props.navigation.navigate('App')
       }
       else{
-        console.log('no phone #')
-        this.props.navigation.navigate('Phone')
+        // console.log('no phone #')
+        // this.props.navigation.navigate('Phone')
+        this.props.navigation.navigate('App')
       }
 
       } catch (error) {
@@ -166,7 +167,7 @@ export default class Login extends Component {
       }
       else{
         console.log('no phone #')
-        this.props.navigation.navigate('Phone')
+        this.props.navigation.navigate('App')
       }
   }
 

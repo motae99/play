@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -23,9 +23,11 @@ import { SharedElement } from 'react-navigation-shared-element';
 import {CirclesLoader, PulseLoader, TextLoader, DotsLoader} from 'react-native-indicator';
 
 import { useNavigation, useNavigationParam} from 'react-navigation-hooks'
+import { ListingContext } from '../../../context/ListingContext';
 
+import { UserContext } from '../../../context/UserContext';
 
-const intial  = firestore().collection('partyHalls').orderBy("timestamp", "desc");
+const intial  = firestore().collection('partyHalls').orderBy("timestamp", "asc");
 
 const { width, height } = Dimensions.get("window");
 
@@ -54,88 +56,18 @@ const styles = StyleSheet.create({
 
 });
 
-export default function  Listing(){
+const Listing = () => {
   const { navigate } = useNavigation();
+  const {
+    documentData,
+    loading,
+    refreshing,
+    setRfreshing, 
+    setLoading,
+    setQuery
+  } = useContext(ListingContext);
 
-  const [ documentData, setDocumentData] = useState([]); 
-  const [ limit, setLimit] = useState(3); 
-  const [ reseting, reset] = useState(false); 
-  const [ lastVisible, setLastVisible] = useState(null); 
-  const [ fetching, reFetching] = useState(false); 
-  const [ refreshing, setRfreshing] = useState(false); 
-  const [ loading, setLoading] = useState(true); 
-  const [ query, setQuery] = useState(intial); 
-
-  useEffect(() => {
-    try{ 
-      const unsubscribe = query.limit(limit).onSnapshot((querySnapshot) => {
-        if(querySnapshot){ 
-          const documentData = querySnapshot.docs.map((documentSnapshot) => {
-            return {
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id, 
-              isHearted: false
-            };
-          });
-          if(documentData && documentData.length > 0){
-            // console.log('lenght :', documentData.length)
-            // // console.log('last :', documentData[documentData.length -1])
-            // console.log('start after key :', documentData[documentData.length - 1].key)
-            // console.log('start after timestamp :', documentData[documentData.length - 1].timestamp)
-            let last = documentData[documentData.length - 1].timestamp;
-            if(last){
-              setLastVisible(last)
-              setDocumentData(documentData);
-            }
-          }
-
-          if (loading) {
-            setLoading(false);
-          }
-          if (refreshing) {
-            setRfreshing(false);
-          }
-          
-         }
-         });
-        return () => unsubscribe(); 
-      }catch (error) {
-        console.log(error);
-      }
-   }, [query]);
-
-   useEffect(() => {
-      const unsubscribe = query.startAfter(lastVisible).limit(2).onSnapshot((querySnapshot) => {
-        if(querySnapshot){ 
-          const moreData = querySnapshot.docs.map((documentSnapshot) => {
-            return {
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id, 
-              isHearted: false
-            };
-          });
-          if(moreData && moreData.length > 0){
-            // console.log('lenght more load:', moreData.length)
-            // // console.log('last :', moreData[moreData.length -1])
-            // console.log('start after key :', moreData[moreData.length - 1].key)
-            // console.log('start after timestamp :', moreData[moreData.length - 1].timestamp)
-            let last = moreData[moreData.length - 1].timestamp;
-            if(last){
-              setLastVisible(last)
-              setDocumentData([...documentData, ...moreData]);
-            }
-          }
-
-          // if (kantaOffersLoading) {
-          //   setKantaOffersLoading(false);
-          // }
-          if (fetching) {
-            reFetching(false);
-          }
-         }
-         });
-        return () => unsubscribe(); 
-   }, [fetching]);
+  // const User = useContext(UserContext);
 
   const renderHeader = () => {
     try {
@@ -220,7 +152,7 @@ export default function  Listing(){
             onRefresh={() => handelRefresh()}
           />
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.mapButton}
             // onPress={() => setQuery }
             onPress={() => navigate("EventMap", { data: documentData }) }
@@ -233,11 +165,26 @@ export default function  Listing(){
             onPress={() => navigate("EventFilter", { data: documentData }) }
           >
             <Feather name="filter" size={35} color={"#ffff"} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       );
     }
 
     return null;
   
+}
+
+export default function (){
+  return (
+    <ListingContext.Provider value={
+      documentData,
+      loading,
+      refreshing,
+      setRfreshing, 
+      setLoading,
+      setQuery
+    } >
+      <Listing />
+    </ListingContext.Provider>
+  );
 }

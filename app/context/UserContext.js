@@ -70,7 +70,6 @@ const UserContextProvider = props => {
     }
    }
 
- 
    async function requestPermission(){
     try {
       await messaging().registerForRemoteNotifications();
@@ -82,12 +81,6 @@ const UserContextProvider = props => {
       console.log(error)
     }
    }
-
-  
-
-
-  
-
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged( user => {
@@ -225,67 +218,3 @@ const UserContextProvider = props => {
 };
 
 export default UserContextProvider;
-
-// useEffect(() => {
-//  const unsubscribe = intialQuery
-//    .onSnapshot((querySnapshot) => {
-//      // Add users into an array
-//      const Data = querySnapshot.docs.map((documentSnapshot) => {
-//        return {
-//          ...documentSnapshot.data(),
-//          id: documentSnapshot.id, // required for FlatList
-//          isHearted: false,
-//          // selectedClass = styles.list,
-//        };
-//      });
-
-//      let last = Data[Data.length - 1];
-//      let lastId = last.id;
-//      // console.log('last',last)
-//      console.log('lastId',lastId)
-//      setLastVisible(lastId)
-//      console.log('before  ',serverData)
-//      if(serverData.length > 0){
-//        setData(...Data);
-//      }
-//      else{
-//        setData(Data)
-//      }
-//      // setData(Data);
-//      console.log('server data after speread', serverData)
-
-//      // As this can trigger multiple times, only update loading after the first update
-//      if (loading) {
-//        setLoading(false);
-//      }
-//      if (refreshing) {
-//        setRefreshing(false);
-//      }
-//    });
-
-//    return () => unsubscribe(); // Stop listening for updates whenever the component unmounts
-// }, []);
-
-// loginWithEmail = (email, password) => {
-//  return auth().signInWithEmailAndPassword(email, password)
-// }
-
-// signupWithEmail = (email, password) => {
-//  return auth().createUserWithEmailAndPassword(email, password)
-// }
-
-// signOut = () => {
-//  return auth().signOut()
-// }
-
-// checkUserAuth = user => {
-//  return auth().onAuthStateChanged(user)
-// }
-
-// createNewUser = userData => {
-// return firebase
-//   .firestore()
-//   .collection('users')
-//   .doc(`${userData.uid}`)
-//   .set(userData)
-// }

@@ -10,23 +10,7 @@ import Colors from '../../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { UserContext } from '../../../context/UserContext';
 
-// const {name, icon, data, onPress} = this.props;
-// const {isLiked, didComment, shared} = data;
-
 export default function Button({name, icon, data, onPress}){
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         pressed: true,
-    //         liked: props.data.isLiked,
-    //         didComment: props.data.didComment,
-    //         shared: props.data.shared,
-    //         name: props.name,
-    //         icon: props.icon,
-    //         data: props.data,
-    //     }
-    
-    // }
 
     const {postDislike, postLike, postsLiked} = useContext(UserContext);
     // const {isLiked, didComment, shared} = data;

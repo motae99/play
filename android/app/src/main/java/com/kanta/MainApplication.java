@@ -10,9 +10,10 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-// me //
-// import co.apptailor.googlesignin.RNGoogleSigninPackage;  // <--- import
-// me //
+//CodePush
+import com.microsoft.codepush.react.CodePush;
+
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -30,11 +31,6 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage()
 
-          // me // NOW
-          // new RNGoogleSigninPackage() // <-- this needs to be in the list
-          // packages.add(new RNGoogleSigninPackage()
-
-          // me //
 
           return packages;
         }
@@ -42,6 +38,14 @@ public class MainApplication extends Application implements ReactApplication {
         @Override
         protected String getJSMainModuleName() {
           return "index";
+        }
+
+        // 2. Override the getJSBundleFile method in order to let
+        // the CodePush runtime determine where to get the JS
+        // bundle location from on each app start
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
         }
       };
 

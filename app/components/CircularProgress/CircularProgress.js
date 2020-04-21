@@ -27,9 +27,9 @@ export default ({ progress, bg, fg }) => {
     extrapolate: Extrapolate.CLAMP
   });
   return (
-    <>
+    <View>
       <View style={{ zIndex: 1 }}>
-        <HalfCircle color={fg} />
+        <HalfCircle color={fg}  />
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
@@ -43,6 +43,7 @@ export default ({ progress, bg, fg }) => {
           <HalfCircle color={bg} />
         </Animated.View>
       </View>
+      
       <View style={{ transform: [{ rotate: "180deg" }] }}>
         <HalfCircle color={fg} />
         <Animated.View
@@ -54,6 +55,8 @@ export default ({ progress, bg, fg }) => {
           <HalfCircle color={bg} />
         </Animated.View>
       </View>
-    </>
+    </View>
+    
+  
   );
 };

@@ -50,13 +50,22 @@ export default memo(() => {
      
      const arrayUnion = firebase.firestore.FieldValue.arrayUnion(service);
 
-      await firebase.firestore().collection("partyHalls").doc(user.uid)
-      .update({
-       services: arrayUnion,
-     });
+      try{
+        await firebase.firestore().collection("partyHalls").doc(user.uid)
+        .update({
+          [service] : arrayUnion,
+        });
+      }
+      catch (error){
+        await firebase.firestore().collection("partyHalls").doc(user.uid)
+        .set({
+          [service] : arrayUnion,
+        });
+      }
 
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+      Alert.alert('please Ya :) login as a provider user Ok');
       actions.setFieldError("general", error.message);
     } finally {
       actions.setSubmitting(false);

@@ -15,6 +15,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import CommentScreen from "../screens/CommentScreen";
 import Listing from "../screens/Listing/Main";
 import EventListing from "../screens/Listing/eventServices/List";
+import ListingAndMap from "../screens/Listing/eventServices/Index";
 import EventDetail from "../screens/Listing/eventServices/Detail";
 import EventMap from "../screens/Listing/eventServices/Map";
 
@@ -55,12 +56,13 @@ import { AnimatedCircleBarComponent } from 'react-navigation-custom-bottom-tab-c
 const ListingStack = createSharedElementStackNavigator(
   {
     Listing: Listing,
+    // ListingAndMap: ListingAndMap,
     EventListing: EventListing,
     EventDetail: EventDetail,
     EventMap: EventMap
   },
   {
-    initialRouteName: 'Listing',
+    initialRouteName: 'EventListing',
     headerMode: "none",
   }
 );
@@ -70,9 +72,9 @@ ListingStack.navigationOptions = ({ navigation }) => {
   //   <Feather name="list" size={24} color={tintColor} />
   // )
   let tabBarVisible = true;
-  if (navigation.state.index > 0) {
-    tabBarVisible = false;
-  }
+  // if (navigation.state.index > 0) {
+  //   tabBarVisible = false;
+  // }
 
   return {
     tabBarVisible,
@@ -134,22 +136,22 @@ const AppNavigation = createStackNavigator(
           }
         },
        
-        Booking: {
-          screen: Booking,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-home" size={24} color={tintColor} />
-            )
-          }
-        },
-        AdminBooking: {
-          screen: AdminBooking,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-home" size={24} color={tintColor} />
-            )
-          }
-        },
+        // Booking: {
+        //   screen: Booking,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-home" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
+        // AdminBooking: {
+        //   screen: AdminBooking,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-home" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
         // Files: {
         //   screen: Files,
         //   navigationOptions: {

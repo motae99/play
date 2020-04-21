@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.kanta">
 
-    
+    <uses-permission android:name="com.android.vending.BILLING" />
+
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
@@ -38,7 +39,7 @@
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
-      android:allowBackup="false"
+      android:allowBackup="true"
       android:largeHeap="true"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
@@ -119,6 +120,11 @@
         <!-- </ Only if you're using GCM or localNotificationSchedule() > -->
 
         <!-- < Else > -->
+        
+        <!-- ScrollView Smart  -->
+        <!-- <activity android:windowSoftInputMode="adjustPan" /> -->
+        <!-- ScrollView Smart  -->
+
         <service
             android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
             android:exported="false" >
