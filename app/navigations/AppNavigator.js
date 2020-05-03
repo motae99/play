@@ -1,90 +1,98 @@
-import React, { Component, memo } from "react";
-import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import React, {Component, memo} from 'react';
+// import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
-import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import {createStackNavigator} from 'react-navigation-stack';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createAppContainer} from 'react-navigation';
 
+import UserContextProvider from '../context/UserContext';
 
-import IonIcon from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
-import HomeScreen from "../screens/HomeScreen";
-import PostScreen from "../screens/PostScreen";
-import NotificationScreen from "../screens/NotificationScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import CommentScreen from "../screens/CommentScreen";
-import Listing from "../screens/Listing/Main";
-import EventListing from "../screens/Listing/eventServices/List";
-import ListingAndMap from "../screens/Listing/eventServices/Index";
-import EventDetail from "../screens/Listing/eventServices/Detail";
-import EventMap from "../screens/Listing/eventServices/Map";
+// import Registration from '../Muzamil/Registration';
+// import ListOffers from '../Muzamil/ListOffers';
+// import Services from '../Muzamil/Services';
+// import ProfileScreen from '../Muzamil/SignOut';
 
-import UserStack from "../screens/Profile/Index";
-import UserProfile from "../screens/Profile/UserProfile";
-import Offers from "../screens/Offers/OfferLanding";
-// import OfferStack from "../screens/Offers/Index";
-import SocialStack from "../screens/Social/Index";
+import Test from '../Muzamil/Test';
 
-import Provider from "../screens/Listing/ProviderHome"
-import AddEvent from "../screens/Admin/AddEvent"
-import AddService from "../screens/Admin/Service"
-import AddSub from "../screens/Admin/SubService"
-import Booking from "../screens/Admin/Booking"
-import AdminBooking from "../screens/Admin/AdminBooking"
+// import HomeScreen from "../screens/HomeScreen";
+// import PostScreen from "../screens/PostScreen";
+// import NotificationScreen from "../screens/NotificationScreen";
+// import CommentScreen from "../screens/CommentScreen";
+// import ListingStack from '../screens/Listing/eventServices/ListingStack';
 
-import AddEventProvider from "../screens/Admin/Add";
-import AddEventServices from "../screens/Admin/Services";
-import Files from "../screens/Admin/Files";
-import Reservations from "../screens/Admin/Reservations";
+// import UserStack from "../screens/Profile/Index";
+// import UserProfile from "../screens/Profile/UserProfile";
+// import Offers from "../screens/Offers/OfferLanding";
+// // import OfferStack from "../screens/Offers/Index";
+// import SocialStack from "../screens/Social/Index";
 
-import { AnimatedCircleBarComponent } from 'react-navigation-custom-bottom-tab-component/AnimatedCircleBarComponent';
-// const Navigation = createBottomTabNavigator(
-//   {
-//     UserStack,
-//     OfferStack,
-//     Listing,
-//     HomeScreen,
-//   },
-//   {
-//     tabBarComponent: AnimatedCircleBarComponent,
-//   },
-// );
-// export default Navigation;
+// import Provider from '../screens/Listing/Provider';
+// import AddEvent from "../screens/Admin/AddEvent"
+// import AddService from "../screens/Admin/Service"
+// import AddSub from "../screens/Admin/SubService"
+// import Booking from "../screens/Admin/Booking"
+// import AdminBooking from "../screens/Admin/AdminBooking"
 
+// import AddEventProvider from "../screens/Admin/Add";
+// import AddEventServices from "../screens/Admin/Services";
+// import Files from "../screens/Admin/Files";
+// import Reservations from "../screens/Admin/Reservations";
 
-
-const ListingStack = createSharedElementStackNavigator(
-  {
-    Listing: Listing,
-    // ListingAndMap: ListingAndMap,
-    EventListing: EventListing,
-    EventDetail: EventDetail,
-    EventMap: EventMap
-  },
-  {
-    initialRouteName: 'EventListing',
-    headerMode: "none",
-  }
-);
-
-ListingStack.navigationOptions = ({ navigation }) => {
-  // return tabBarIcon = ({ tintColor }) => (
-  //   <Feather name="list" size={24} color={tintColor} />
-  // )
-  let tabBarVisible = true;
-  // if (navigation.state.index > 0) {
-  //   tabBarVisible = false;
-  // }
-
-  return {
-    tabBarVisible,
-  };
-};
+import {AnimatedCircleBarComponent} from 'react-navigation-custom-bottom-tab-component/AnimatedCircleBarComponent';
 
 const AppNavigation = createStackNavigator(
   {
     default: createBottomTabNavigator(
       {
+        Testing: {
+          screen: Test,
+          navigationOptions: {
+            tabBarIcon: ({tintColor}) => (
+              <IonIcon name="ios-chatboxes" size={24} color={tintColor} />
+            ),
+          },
+        },
+
+        // ListOffers: {
+        //   screen: ListOffers,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     ),
+        //   },
+        // },
+
+        // Registration: {
+        //   screen: Registration,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     ),
+        //   },
+        // },
+
+        // Services: {
+        //   screen: Services,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     ),
+        //   },
+        // },
+
+        // Profile: {
+        //   screen: ProfileScreen,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-person" size={24} color={tintColor} />
+        //     ),
+        //     // tabBarVisible: false,
+        //   },
+        // },
+
         // Offers: {
         //   screen: Offers,
         //   navigationOptions: {
@@ -93,49 +101,49 @@ const AppNavigation = createStackNavigator(
         //     )
         //   }
         // },
-        EListing: {
-          screen: ListingStack,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <Feather name="list" size={24} color={tintColor} />
-            )
-          }
-        },
+        // EListing: {
+        //   screen: ListingStack,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <Feather name="list" size={24} color={tintColor} />
+        //     ),
+        //   },
+        // },
         // Provider: {
         //   screen: Provider,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     ),
+        //   },
+        // },
+        // AddEvent: {
+        //   screen: AddEvent,
         //   navigationOptions: {
         //     tabBarIcon: ({ tintColor }) => (
         //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
         //     )
         //   }
         // },
-        AddEvent: {
-          screen: AddEvent,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-notifications" size={24} color={tintColor} />
-            )
-          }
-        },
 
-        AddService: {
-          screen: AddService,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-notifications" size={24} color={tintColor} />
-            )
-          }
-        },
+        // AddService: {
+        //   screen: AddService,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
 
-        AddSub: {
-          screen: AddSub,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-notifications" size={24} color={tintColor} />
-            )
-          }
-        },
-       
+        // AddSub: {
+        //   screen: AddSub,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-notifications" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
+
         // Booking: {
         //   screen: Booking,
         //   navigationOptions: {
@@ -160,15 +168,15 @@ const AppNavigation = createStackNavigator(
         //     )
         //   }
         // },
-        User: {
-          screen: UserProfile,
-          navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-              <IonIcon name="ios-person" size={24} color={tintColor} />
-            )
-          }
-        },
-        
+        // User: {
+        //   screen: UserProfile,
+        //   navigationOptions: {
+        //     tabBarIcon: ({ tintColor }) => (
+        //       <IonIcon name="ios-person" size={24} color={tintColor} />
+        //     )
+        //   }
+        // },
+
         // Add: {
         //   screen: AddEventProvider,
         //   navigationOptions: {
@@ -185,7 +193,7 @@ const AppNavigation = createStackNavigator(
         //     )
         //   }
         // },
-        
+
         // Reservations: {
         //   screen: Reservations,
         //   navigationOptions: {
@@ -194,7 +202,7 @@ const AppNavigation = createStackNavigator(
         //     )
         //   }
         // },
-        
+
         // Social: {
         //   screen: SocialStack,
         //   navigationOptions: {
@@ -203,7 +211,6 @@ const AppNavigation = createStackNavigator(
         //     )
         //   }
         // },
-        
 
         // Post: {
         //   screen: PostScreen,
@@ -223,47 +230,43 @@ const AppNavigation = createStackNavigator(
         //     )
         //   }
         // },
-        
-        // Profile: {
-        //   screen: ProfileScreen,
-        //   navigationOptions: {
-        //     tabBarIcon: ({ tintColor }) => (
-        //       <IonIcon name="ios-person" size={24} color={tintColor} />
-        //     ),
-        //     tabBarVisible: false
-        //   }
-        // }
       },
       // {
       //   tabBarComponent: AnimatedCircleBarComponent,
       // },
       {
         defaultNavigationOptions: {
-          tabBarOnPress: ({ navigation, defaultHandler }) => {
-            if (navigation.state.key === "Post") {
-              navigation.navigate("postModal");
+          tabBarOnPress: ({navigation, defaultHandler}) => {
+            if (navigation.state.key === 'Post') {
+              navigation.navigate('postModal');
             } else {
               defaultHandler();
             }
-            
-          }
+          },
         },
         tabBarOptions: {
-          activeTintColor: "#161F3D",
-          inactiveTintColor: "#B8BBC4",
-          showLabel: true
-        }
-      }
+          activeTintColor: '#161F3D',
+          inactiveTintColor: '#B8BBC4',
+          showLabel: true,
+        },
+      },
     ),
-
   },
   {
     // mode: "modal",
-    headerMode: "none",
+    headerMode: 'none',
     // initialRouteName: "EListing"
-  }
+  },
 );
 
+const AppStackContainer = createAppContainer(AppNavigation);
 
+const AppStack = () => {
+  return (
+    <UserContextProvider>
+      <AppStackContainer />
+    </UserContextProvider>
+  );
+};
 
-export default AppNavigation;
+export default AppStack;

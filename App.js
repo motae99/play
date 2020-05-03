@@ -1,3 +1,75 @@
+import React, {Fragment} from 'react';
+// import {View, Text } from 'react-native';
+import AppContainer from './app/navigations/index';
+import NavigationService from './app/services/NavigationService';
+import PushController from './app/services/PushNotification';
+import DynamicLinks from './app/services/DynamicLinks';
+import codePush from 'react-native-code-push';
+import analytics from '@react-native-firebase/analytics';
+
+// codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(MyApp);
+
+// checkFrequency are MANUAL, ON_APP_RESUME, default to ON_APP_START
+// installMode ON_NEXT_RESTART, IMMEDIATE, ON_NEXT_RESUME, ON_NEXT_SUSPEND
+const codePushOptions = {
+  updateDialog: true,
+  checkFrequency: codePush.CheckFrequency.MANUAL,
+  installMode: codePush.InstallMode.IMMEDIATE,
+};
+
+const App = () => {
+  // not working Try Again
+  // codePushStatusDidChange(status) {
+  //   switch(status) {
+  //       case codePush.SyncStatus.CHECKING_FOR_UPDATE:
+  //           console.log("Checking for updates.");
+  //           break;
+  //       case codePush.SyncStatus.DOWNLOADING_PACKAGE:
+  //           console.log("Downloading package.");
+  //           break;
+  //       case codePush.SyncStatus.INSTALLING_UPDATE:
+  //           console.log("Installing update.");
+  //           break;
+  //       case codePush.SyncStatus.UP_TO_DATE:
+  //           console.log("Up-to-date.");
+  //           break;
+  //       case codePush.SyncStatus.UPDATE_INSTALLED:
+  //           console.log("Update installed.");
+  //           break;
+  //     }
+  // }
+
+  // codePushDownloadDidProgress(progress) {
+  //     console.log(progress.receivedBytes + " of " + progress.totalBytes + " received.");
+  // }
+
+  return (
+    <Fragment>
+      <AppContainer
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+        onNavigationStateChange={(prevState, currentState, action) => {
+          const currentRouteName = NavigationService.getActiveRouteName(
+            currentState,
+          );
+          const previousRouteName = NavigationService.getActiveRouteName(
+            prevState,
+          );
+
+          if (previousRouteName !== currentRouteName) {
+            analytics().setCurrentScreen(currentRouteName, currentRouteName);
+          }
+        }}
+      />
+      <PushController />
+      <DynamicLinks />
+    </Fragment>
+  );
+};
+
+export default codePush(codePushOptions)(App);
+
 // import * as React from "react";
 // import {
 //   View, Image, StyleSheet, ImageSourcePropType, Dimensions, Platform, Text,
@@ -7,7 +79,7 @@
 // import { transform } from "@babel/core";
 
 // const {
-//   Value, concat, interpolate, cond, and, greaterOrEq, lessThan,  set, useCode 
+//   Value, concat, interpolate, cond, and, greaterOrEq, lessThan,  set, useCode
 // } = Animated;
 
 // const { width } = Dimensions.get("window");
@@ -25,25 +97,23 @@
 //   },
 // });
 
-
 // export default () => {
-    
-         
+
 //     return (
-//       <View style={styles.container}> 
-//         <View style={{ 
-//                 backgroundColor: "red" , 
+//       <View style={styles.container}>
+//         <View style={{
+//                 backgroundColor: "red" ,
 //                 transform: [
 //                   {rotateY: "180deg"}
 //                 ]
 //               }}
-        
+
 //         />
 //      </View>
 //     );
 
 //     // <View style={styles.container}>
-        
+
 //     {/* <Animated.View style={{
 //       ...StyleSheet.absoluteFillObject,
 //       justifyContent: "center",
@@ -72,13 +142,11 @@
 //       ],
 //     }}
 //     >
-//        <Image source={front} style={styles.image} /> 
+//        <Image source={front} style={styles.image} />
 //       <View  style={styles.image, {backgroundColor: 'blue'}} />
 //     </Animated.View>  */}
 //   // </View>
 // }
-
-
 
 // import React from "react";
 // import { StyleSheet, View, Alert, Text } from "react-native";
@@ -112,7 +180,6 @@
 //   const progress = withTransition(isActive, { duration });
 //   const scale = bInterpolate(progress, 1, 1.2);
 
-
 //   return (
 //     <View style={styles.container}>
 //       <TapGestureHandler {...gestureHandler}>
@@ -124,39 +191,6 @@
 //   );
 // };
 
-import React, { Fragment } from 'react';
-import AppContainer from './app/navigations/index';
-import NavigationService from './app/services/NavigationService';
-import PushController from './app/services/PushNotification';
-import DynamicLinks from './app/services/DynamicLinks';
-import codePush from "react-native-code-push";
-import analytics from '@react-native-firebase/analytics';
-
- 
-const codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-
-const App = () => (
-      <Fragment>
-        <AppContainer
-          ref={navigatorRef => {
-            NavigationService.setTopLevelNavigator(navigatorRef);
-          }}
-
-          onNavigationStateChange={(prevState, currentState, action) => {
-            const currentRouteName = NavigationService.getActiveRouteName(currentState);
-            const previousRouteName = NavigationService.getActiveRouteName(prevState);
-      
-            if (previousRouteName !== currentRouteName) {
-              analytics().setCurrentScreen(currentRouteName, currentRouteName);
-            }
-          }}
-        />
-        <PushController/>
-        <DynamicLinks/>
-      </Fragment>
-    );
-
-export default codePush(codePushOptions)(App);
 // export default () => (
 //   <AppContainer
 //     onNavigationStateChange={(prevState, currentState, action) => {
@@ -171,7 +205,6 @@ export default codePush(codePushOptions)(App);
 //     }}
 //   />
 // );
-
 
 // // // import React, { Component } from 'react';
 // // // import { StackNavigator, createAppContainer } from 'react-navigation';

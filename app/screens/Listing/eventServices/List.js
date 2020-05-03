@@ -1,35 +1,18 @@
 import React, { useContext } from "react";
 import {
-  ActivityIndicator,
-  Dimensions,
   FlatList,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  StatusBar,
-  Image
+  TouchableOpacity
 } from "react-native";
 import firestore from "@react-native-firebase/firestore";
-import Feather from "react-native-vector-icons/Feather";
+import Feather from 'react-native-vector-icons/Feather'
 import Card from "../components/EventListCard";
 import LottieView from 'lottie-react-native'; 
-import FastImage from "react-native-fast-image";
-
-import { SharedElement } from 'react-navigation-shared-element';
-
-// import SkeletonContent from "react-native-skeleton-content";
-import {CirclesLoader, PulseLoader, TextLoader, DotsLoader} from 'react-native-indicator';
 
 import { useNavigation, useNavigationParam} from 'react-navigation-hooks'
 import { ListingContext } from '../../../context/ListingContext';
-
-import { UserContext } from '../../../context/UserContext';
-
-const intial  = firestore().collection('partyHalls').orderBy("timestamp", "asc");
-
-const { width, height } = Dimensions.get("window");
 
 // Styles
 const styles = StyleSheet.create({
@@ -56,7 +39,7 @@ const styles = StyleSheet.create({
 
 });
 
-const Listing = () => {
+export default Listing = () => {
   const { navigate } = useNavigation();
   const {
     documentData,
@@ -64,10 +47,11 @@ const Listing = () => {
     refreshing,
     setRfreshing, 
     setLoading,
-    setQuery
+    setQuery,
+    fetching,
+    reFetching
   } = useContext(ListingContext);
 
-  // const User = useContext(UserContext);
 
   const renderHeader = () => {
     try {
@@ -90,36 +74,7 @@ const Listing = () => {
     
   };              
 
-  const toggleHeart = item => {
-    // console.log(item)
-    item.isHearted = !item.isHearted;
-    // console.log(item)
-    // // data.item.selectedClass = data.item.isSelect
-    // //   ? styles.selected
-    // //   : styles.list;
-    // // const index = this.state.dataSource.findIndex(
-    // //   item => data.item.id === item.id
-    // // );
-    // // this.state.dataSource[index] = data.item;
-    // // this.setState({
-    // //   dataSource: this.state.dataSource
-    // // });
-    // // console.log("My heart is completely with you")
-    // // console.log("Heart", data.isHearted)
-    // data.isHearted = !data.isHearted;
 
-    // // console.log("toggled", data.isHearted)
-
-    // const index = documentData.findIndex(
-    //   item => data.id === item.id
-    // );
-    // // console.log("index", index)
-    // // console.log("documentData[index]", documentData[index])
-    // // console.log("data", data)
-
-    // documentData[index] = data;
-    // setDocumentData({ documentData: documentData });
-  };
 
   const handelRefresh = () => {
     setRfreshing(true)
@@ -142,7 +97,7 @@ const Listing = () => {
         <View style={styles.container}>
           <FlatList
             data={documentData}
-            renderItem={({ item }) =><Card item={item} toggleHeart={toggleHeart}/>}
+            renderItem={({ item }) =><Card item={item} />}
             keyExtractor={item => String(item.key)}
             ListHeaderComponent={() => renderHeader() }
             ListFooterComponent={() => renderFooter() }
@@ -152,7 +107,7 @@ const Listing = () => {
             onRefresh={() => handelRefresh()}
           />
 
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.mapButton}
             // onPress={() => setQuery }
             onPress={() => navigate("EventMap", { data: documentData }) }
@@ -165,26 +120,11 @@ const Listing = () => {
             onPress={() => navigate("EventFilter", { data: documentData }) }
           >
             <Feather name="filter" size={35} color={"#ffff"} />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       );
     }
 
     return null;
   
-}
-
-export default function (){
-  return (
-    <ListingContext.Provider value={
-      documentData,
-      loading,
-      refreshing,
-      setRfreshing, 
-      setLoading,
-      setQuery
-    } >
-      <Listing />
-    </ListingContext.Provider>
-  );
 }
