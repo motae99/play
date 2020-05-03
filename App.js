@@ -13,7 +13,7 @@ import analytics from '@react-native-firebase/analytics';
 // installMode ON_NEXT_RESTART, IMMEDIATE, ON_NEXT_RESUME, ON_NEXT_SUSPEND
 const codePushOptions = {
   updateDialog: true,
-  checkFrequency: codePush.CheckFrequency.MANUAL,
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
   installMode: codePush.InstallMode.IMMEDIATE,
 };
 
