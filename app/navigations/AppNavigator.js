@@ -13,9 +13,11 @@ import Feather from 'react-native-vector-icons/Feather';
 // import Registration from '../Muzamil/Registration';
 // import ListOffers from '../Muzamil/ListOffers';
 // import Services from '../Muzamil/Services';
-// import ProfileScreen from '../Muzamil/SignOut';
+import Customer from '../Muzamil/Customer';
+// import Home from '../Muzamil/Home';
+import ProfileScreen from '../Muzamil/SignOut';
 
-import Test from '../Muzamil/Test';
+// import Test from '../Muzamil/Test';
 
 // import HomeScreen from "../screens/HomeScreen";
 // import PostScreen from "../screens/PostScreen";
@@ -47,14 +49,24 @@ const AppNavigation = createStackNavigator(
   {
     default: createBottomTabNavigator(
       {
-        Testing: {
-          screen: Test,
-          navigationOptions: {
-            tabBarIcon: ({tintColor}) => (
-              <IonIcon name="ios-chatboxes" size={24} color={tintColor} />
-            ),
-          },
-        },
+        // Testing: {
+        //   screen: Test,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-chatboxes" size={24} color={tintColor} />
+        //     ),
+        //   },
+        // },
+
+        // Home: {
+        //   screen: Home,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-chatboxes" size={24} color={tintColor} />
+        //     ),
+        //     // tabBarVisible: false,
+        //   },
+        // },
 
         // ListOffers: {
         //   screen: ListOffers,
@@ -83,15 +95,15 @@ const AppNavigation = createStackNavigator(
         //   },
         // },
 
-        // Profile: {
-        //   screen: ProfileScreen,
-        //   navigationOptions: {
-        //     tabBarIcon: ({tintColor}) => (
-        //       <IonIcon name="ios-person" size={24} color={tintColor} />
-        //     ),
-        //     // tabBarVisible: false,
-        //   },
-        // },
+        Profile: {
+          screen: ProfileScreen,
+          navigationOptions: {
+            tabBarIcon: ({tintColor}) => (
+              <IonIcon name="ios-person" size={24} color={tintColor} />
+            ),
+            // tabBarVisible: false,
+          },
+        },
 
         // Offers: {
         //   screen: Offers,
@@ -251,7 +263,13 @@ const AppNavigation = createStackNavigator(
         },
       },
     ),
+    Customer: {
+      screen: Customer,
+      mode: 'modal',
+      headerMode: 'none',
+    },
   },
+
   {
     // mode: "modal",
     headerMode: 'none',

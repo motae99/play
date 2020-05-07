@@ -72,21 +72,23 @@ export default memo(() => {
   // console.log(User);
 
   useEffect(() => {
-    try {
-      const unsubscribe = firestore()
-        .collection('users')
-        .doc(User.uid)
-        .onSnapshot(documentSnapshot => {
-          if (documentSnapshot.exists) {
-            setUserInfo(documentSnapshot.data());
-          } else {
-            // set some exception handling here
-          }
-        });
+    if (User) {
+      try {
+        const unsubscribe = firestore()
+          .collection('users')
+          .doc(User.uid)
+          .onSnapshot(documentSnapshot => {
+            if (documentSnapshot.exists) {
+              setUserInfo(documentSnapshot.data());
+            } else {
+              // set some exception handling here
+            }
+          });
 
-      return () => unsubscribe();
-    } catch (error) {
-      console.log(error);
+        return () => unsubscribe();
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, [User]);
 
@@ -96,7 +98,7 @@ export default memo(() => {
       try {
         const unsubscribe = firestore()
           .collection(userInfo.type)
-          .doc(User.uid)
+          .doc(userInfo.uid)
           .onSnapshot(documentSnapshot => {
             if (documentSnapshot.exists) {
               setProvider(documentSnapshot.data());
@@ -110,7 +112,7 @@ export default memo(() => {
         console.log(error);
       }
     }
-  }, [User.uid, userInfo]);
+  }, [userInfo]);
 
   useEffect(() => {
     try {
@@ -233,6 +235,13 @@ export default memo(() => {
     }
   };
 
+  if (!userInfo) {
+    return (
+      <View>
+        <Text>please add provider first</Text>
+      </View>
+    );
+  }
   return (
     <ScrollView>
       <Formik
@@ -344,6 +353,7 @@ export default memo(() => {
 
             <FormInput
               name="price"
+              keyboardType="numeric"
               value={values.price}
               onChangeText={handleChange('price')}
               placeholder="السعر"

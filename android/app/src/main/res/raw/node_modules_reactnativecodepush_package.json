@@ -1,0 +1,80 @@
+{
+  "name": "react-native-code-push",
+  "version": "6.2.0",
+  "description": "React Native plugin for the CodePush service",
+  "main": "CodePush.js",
+  "typings": "typings/react-native-code-push.d.ts",
+  "homepage": "https://microsoft.github.io/code-push",
+  "keywords": [
+    "react-native",
+    "code",
+    "push"
+  ],
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "scripts": {
+    "clean": "shx rm -rf bin",
+    "setup": "npm install --quiet --no-progress",
+    "prebuild:tests": "npm run clean && npm run tslint",
+    "build:tests": "tsc",
+    "test": "npm run build:tests && npm run test:setup && npm run test:fast",
+    "test:android": "npm run build:tests && npm run test:setup:android && npm run test:fast:android",
+    "test:ios": "npm run build:tests && npm run test:setup:ios && npm run test:fast:ios",
+    "test:setup": "mocha --recursive bin/test --android --ios --setup",
+    "test:setup:android": "mocha --recursive bin/test --android --setup",
+    "test:setup:ios": "mocha --recursive bin/test --ios --setup",
+    "test:fast": "mocha --recursive bin/test --android --ios",
+    "test:fast:android": "mocha --recursive bin/test --android",
+    "test:fast:ios": "mocha --recursive bin/test --ios",
+    "test:debugger:android": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --android",
+    "test:debugger:ios": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --ios",
+    "tslint": "tslint -c tslint.json test/**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/react-native-code-push"
+  },
+  "dependencies": {
+    "code-push": "^3.1.0",
+    "glob": "^5.0.15",
+    "hoist-non-react-statics": "^2.3.1",
+    "inquirer": "^7.0.3",
+    "plist": "3.0.1",
+    "semver": "^7.1.1",
+    "xcode": "1.0.0"
+  },
+  "devDependencies": {
+    "@types/assert": "^1.4.3",
+    "@types/mkdirp": "^0.5.2",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.1.8",
+    "@types/q": "^1.5.2",
+    "archiver": "latest",
+    "body-parser": "latest",
+    "code-push-plugin-testing-framework": "file:./code-push-plugin-testing-framework",
+    "del": "latest",
+    "express": "latest",
+    "mkdirp": "latest",
+    "mocha": "^7.0.0",
+    "q": "^1.5.1",
+    "run-sequence": "latest",
+    "shx": "^0.3.2",
+    "slash": "^3.0.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.5"
+  },
+  "rnpm": {
+    "android": {
+      "packageInstance": "new CodePush(getResources().getString(R.string.CodePushDeploymentKey), getApplicationContext(), BuildConfig.DEBUG)"
+    },
+    "ios": {
+      "sharedLibraries": [
+        "libz"
+      ]
+    },
+    "commands": {
+      "postlink": "node node_modules/react-native-code-push/scripts/postlink/run",
+      "postunlink": "node node_modules/react-native-code-push/scripts/postunlink/run"
+    }
+  }
+}

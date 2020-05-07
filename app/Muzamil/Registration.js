@@ -293,6 +293,8 @@ export default function() {
 
             <FormInput
               name="phoneNo"
+              maxLength={10}
+              keyboardType="numeric"
               value={values.phoneNo}
               onChangeText={handleChange('phoneNo')}
               placeholder="رقم الجوال"

@@ -10,6 +10,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import Feather from 'react-native-vector-icons/Feather';
 import {Rating} from 'react-native-elements';
+import I18n from '../utils/i18n';
 
 const {width, height} = Dimensions.get('window');
 
@@ -20,6 +21,9 @@ const styles = StyleSheet.create({
     margin: 12,
     // height: 190,
     // width: 348,
+  },
+  text: {
+    fontFamily: 'BigVestaRegular',
   },
 });
 
@@ -98,8 +102,8 @@ export default memo(({offer}) => {
               {'  '} {offer.price - (offer.price * offer.disc) / 100} {'QR '}
             </Text>
           </View>
-          <Text> {offer.providerName}</Text>
-          <Text> Remember to add address</Text>
+          <Text style={styles.text}> {offer.providerName}</Text>
+          <Text style={styles.text}> Remember to add address</Text>
         </View>
 
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -158,7 +162,7 @@ export default memo(({offer}) => {
             lineHeight: 17,
             color: '#FFFFFF',
           }}>
-          احجز الأن
+          {I18n.t('Book')}
         </Text>
       </TouchableOpacity>
     </View>

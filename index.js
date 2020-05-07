@@ -21,7 +21,7 @@ import {name as appName} from './app.json';
 //  return Promise.resolve();
 // }
 
-// global.PaymentRequest = require('react-native-payments').PaymentRequest;
+global.PaymentRequest = require('react-native-payments').PaymentRequest;
 
 AppRegistry.registerComponent(appName, () => App);
 

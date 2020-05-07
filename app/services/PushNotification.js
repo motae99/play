@@ -122,16 +122,16 @@ export default class PushController extends Component {
         console.log("fcmToken : ", fcmToken);
         await AsyncStorage.setItem("fcmToken", fcmToken);
         // update user in firestore to reflect the new fcmToken
-        let uid = firebase.auth().currentUser.uid;
-        if (uid) {
-          await firebase
-            .firestore()
-            .doc(`users/${uid}`)
-            .update({
-              fcmToken: fcmToken
-              // firestore.FieldValues.arrayUnion(fcmToken)
-            });
-        }
+        // let uid = firebase.auth().currentUser.uid;
+        // if (uid) {
+        //   await firebase
+        //     .firestore()
+        //     .doc(`users/${uid}`)
+        //     .update({
+        //       fcmToken: fcmToken
+        //       // firestore.FieldValues.arrayUnion(fcmToken)
+        //     });
+        // }
       }
     }
 

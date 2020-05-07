@@ -6,7 +6,10 @@ import {
   StatusBar,
   Dimensions,
   FlatList,
+  StyleSheet,
 } from 'react-native';
+import {useNavigation} from 'react-navigation-hooks';
+
 import firestore from '@react-native-firebase/firestore';
 import {
   Placeholder,
@@ -15,6 +18,7 @@ import {
   Fade,
 } from 'rn-placeholder';
 import Kantaoffer from './MuzOfferCard';
+import {readDocuments} from './ReadDocuments';
 import Feather from 'react-native-vector-icons/Feather';
 import {
   CirclesLoader,
@@ -30,59 +34,192 @@ import RNMorphingText from 'react-native-morphing-text';
 import FastImage from 'react-native-fast-image';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-
 const {width, height} = Dimensions.get('window');
+const styles = StyleSheet.create({
+  header: {
+    height: 48,
+    backgroundColor: '#5999F1',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+  },
+  item: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    margin: 12,
+    // height: 190,
+    // width: 348,
+  },
+  filterView: {
+    // margin: 5,
+    // height: 30,
+    backgroundColor: 'gray',
+    borderRadius: 20,
+    justifyContent: 'center',
+    // alignItems: 'center',
+    marginHorizontal: 5,
+    marginBottom: 10,
+  },
+  filterText: {
+    fontFamily: 'BigVestaRegular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 14,
+    lineHeight: 17,
+    color: '#FFFFFF',
+    padding: 8,
+    alignSelf: 'center',
+  },
+  sorting: {
+    height: 40,
+    width: width - 20,
+    // margin: 10,
+    marginTop: 10,
+    borderColor: '#F264B1',
+    borderWidth: 1,
+    borderRadius: 10,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  sortingView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRightColor: '#F264B1',
+    borderRightWidth: 1,
+  },
+  sortingText: {
+    fontFamily: 'BigVestaBold',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    lineHeight: 17,
+    color: '#F264B1',
+    padding: 5,
+  },
+  customer: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    backgroundColor: 'blue',
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default function Offers({category = 'بشرة'}) {
+  let intialFilter = ['category', '==', category];
+  let intialSort = ['timestamp', 'desc'];
 
-  const intial = firestore()
-  .collection('centerOffers')
-  // .where('category' == category)
-  .orderBy('timestamp', 'desc');
-  
+  let options = {
+    // where: [intialFilter],
+    orderBy: intialSort,
+  };
 
-  const [kantaOffers, setKantaOffers] = useState([]);
-  const [filter, setFilter] = useState(false);
-  const [lastVisible, setLastVisible] = useState(null);
+  const intialQuery = readDocuments('centerOffers', options);
+
+  // Usage
+  // Multiple where
+  // let options = {where: [["category", "==", "someCategory"], ["color", "==", "red"], ["author", "==", "Sam"]], orderBy: ["date", "desc"]};
+
+  // //OR
+  // // A single where
+  // let options = {where: ["category", "==", "someCategory"]};
+
+  // let documents = readDocuments("books", options);
+  const {navigate} = useNavigation();
+
+  const [loading, setLoading] = useState(true);
+  const [subCategories, setSubCategories] = useState(null);
+  const [offers, setOffers] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [query, setQuery] = useState(intialQuery);
+  const [filter, setFilter] = useState(null);
+  const [sort, setSort] = useState(intialSort);
+
   const [render, setRender] = useState(false);
   const [money, setMoney] = useState(false);
   const [price, setPrice] = useState(false);
   const [active, setActive] = useState(false);
   const [time, setTime] = useState(false);
-  const [kantaOffersLoading, setKantaOffersLoading] = useState(false);
-  const [query, setQuery] = useState(intial);
-  const [subCategories, setSubCategories] = useState(null);
 
+  const changeQuery = cond => {
+    if (cond) {
+      console.log(filter);
+
+      let addFilter = ['subCategories', 'array-contains', cond];
+      let newFilter = [...intialFilter, addFilter];
+
+      console.log(filter);
+
+      setFilter(newFilter);
+      console.log(filter);
+
+      // console.log(newFilter);
+
+      //   const newQuery = firestore()
+      //     .collection('centerOffers')
+      //     // .where('languages', 'in', ['en', 'fr'])  // also option
+      //     .where('category', '==', category)
+      //     .where('subCategories', 'array-contains', cond)
+      //     .orderBy('timestamp', 'asc');
+
+      //   setLoading(true);
+      //   setQuery(newQuery);
+    } else {
+      // const newQuery = intial;
+      // setLoading(true);
+      // setQuery(newQuery);
+    }
+  };
 
   useEffect(() => {
-    try {  ;
+    let options = {
+      where: filter,
+      orderBy: sort,
+      startAfter: lastVisible,
+      limit: 2,
+    };
+    console.log('see numer it runs: ', lastVisible);
+    let newQuery = readDocuments('centerOffers', options);
+    setQuery(newQuery);
+  }, [filter, sort, lastVisible]);
+
+  useEffect(() => {
+    try {
       const unsubscribe = firestore()
-          .collection('categories')
-          .orderBy('timestamp', 'desc')
-          .onSnapshot(querySnapshot => {
-        if (querySnapshot) {
-          const sub = querySnapshot.docs.map(documentSnapshot => {
-            return {
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
-            };
-          });
-          if (sub && sub.length > 0) {
+        .collection('categories')
+        .where('name', '==', category)
+        // .orderBy('timestamp', 'desc')
+        .onSnapshot(querySnapshot => {
+          if (querySnapshot) {
+            const sub = querySnapshot.docs.map(documentSnapshot => {
+              return {
+                ...documentSnapshot.data(),
+                // key: documentSnapshot.id,
+              };
+            });
+            if (sub && sub.length > 0) {
               setSubCategories(sub);
+            }
           }
-        }
-      });
+        });
       return () => unsubscribe();
     } catch (error) {
       console.log(error);
     }
-  }, []);
-
+  }, [category]);
 
   useEffect(() => {
     try {
-      const unsubscribe = query.limit(10).onSnapshot(querySnapshot => {
+      const unsubscribe = query.onSnapshot(querySnapshot => {
         if (querySnapshot) {
           const kanta = querySnapshot.docs.map(documentSnapshot => {
             return {
@@ -91,19 +228,15 @@ export default function Offers({category = 'بشرة'}) {
             };
           });
           if (kanta && kanta.length > 0) {
-            // console.log('lenght :', kanta.length)
-            // // console.log('last :', kanta[kanta.length -1])
-            // console.log('start after key :', kanta[kanta.length - 1].key)
-            // console.log('start after timestamp :', kanta[kanta.length - 1].timestamp)
             let last = kanta[kanta.length - 1].timestamp;
             if (last) {
               setLastVisible(last);
-              setKantaOffers(kanta);
+              setOffers(kanta);
             }
           }
 
-          if (kantaOffersLoading) {
-            setKantaOffersLoading(false);
+          if (loading) {
+            setLoading(false);
           }
         }
       });
@@ -111,7 +244,7 @@ export default function Offers({category = 'بشرة'}) {
     } catch (error) {
       console.log(error);
     }
-  }, [kantaOffersLoading, query]);
+  }, [loading, query]);
 
   // useEffect(() => {
   //   const unsubscribe = query
@@ -133,12 +266,12 @@ export default function Offers({category = 'بشرة'}) {
   //           let last = kanta[kanta.length - 1].timestamp;
   //           if (last) {
   //             setLastVisible(last);
-  //             setKantaOffers([...kantaOffers, ...kanta]);
+  //             setOffers([...offers, ...kanta]);
   //           }
   //         }
 
-  //         // if (kantaOffersLoading) {
-  //         //   setKantaOffersLoading(false);
+  //         // if (loading) {
+  //         //   setLoading(false);
   //         // }
   //         if (refreshing) {
   //           setRefreshing(false);
@@ -146,48 +279,7 @@ export default function Offers({category = 'بشرة'}) {
   //       }
   //     });
   //   return () => unsubscribe();
-  // }, [kantaOffers, lastVisible, query, refreshing]);
-
-  const changeQery = () => {
-    // let Q = firestore().collection('centerOffers').where('hallRenting', '<=', 9000).where('hallRenting', '>', 5000).orderBy('hallRenting').orderBy('timestamp')
-    setKantaOffersLoading(true);
-    setQuery(Q);
-
-    // Similarly, use the array-contains-any operator to combine up to 10 array-contains clauses on the same field with a logical OR. An array-contains-any query returns documents where the given field is an array that contains one or more of the comparison values:
-    // citiesRef.where('services', 'array-contains-any',
-    // ['services1', 'service2']);
-    // first do ur conditions
-    // if(active){
-    //   console.log('active', active)
-    //   Q = Q.where('day', '==', false)
-    // }
-    // if(money){
-    //   console.log('hallRenting', money)
-    //   Q = Q.where('hallRenting', '>=', 200)
-    // }
-
-    // // do your orders
-    // if(money){
-    //   Q = Q.orderBy('hallRenting', 'asc')
-    // }
-    // if(active){
-    //   Q = Q.orderBy('day', 'asc')
-    // }
-    // if(time){
-    //   Q = Q.orderBy('validTill', 'desc')
-    // }
-
-    // if( active || money || time || price ){
-    //   setKantaOffersLoading(true)
-    //   // setFilter(Q)
-    //   setQuery(Q)
-    // }
-
-    // console.log(org)
-    // console.log(Q)
-    //  }
-    //  console.log(Q)
-  };
+  // }, [offers, lastVisible, query, refreshing]);
 
   const renderFooter = () => {
     try {
@@ -213,27 +305,105 @@ export default function Offers({category = 'بشرة'}) {
     setRefreshing(true);
   };
 
-  if (kantaOffersLoading) {
+  if (loading) {
     return (
-      <Placeholder
-        Animation={Fade}
-        Left={PlaceholderMedia}
-        Right={PlaceholderMedia}>
-        <PlaceholderLine width={80} />
-        <PlaceholderLine />
-        <PlaceholderLine width={30} />
-      </Placeholder>
+      <View>
+        <View style={{height: 100}} />
+        <Placeholder
+          Animation={Fade}
+          Left={PlaceholderMedia}
+          Right={PlaceholderMedia}>
+          <PlaceholderLine width={80} />
+          <PlaceholderLine />
+          <PlaceholderLine width={30} />
+        </Placeholder>
+        <Placeholder
+          Animation={Fade}
+          Left={PlaceholderMedia}
+          Right={PlaceholderMedia}>
+          <PlaceholderLine width={80} />
+          <PlaceholderLine />
+          <PlaceholderLine width={30} />
+        </Placeholder>
+        <Placeholder
+          Animation={Fade}
+          Left={PlaceholderMedia}
+          Right={PlaceholderMedia}>
+          <PlaceholderLine width={80} />
+          <PlaceholderLine />
+          <PlaceholderLine width={30} />
+        </Placeholder>
+      </View>
     );
   }
 
   return (
     <View style={{flex: 1}}>
-      {
-        subCategories.map( cat => console.log('cat : ', cat))
-      }
+      <View style={styles.header}>
+        <Feather name="x" size={24} color="white" />
+        <Text style={styles.filterText}>{category}</Text>
+        <TouchableOpacity onPress={() => console.log('navigation goBack()')}>
+          <Feather name="arrow-left" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      {subCategories ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            height: 50,
+            alignItems: 'center',
+            // justifyContent: 'flex-start',
+            // justifyContent: 'space-evenly',
+          }}>
+          {subCategories[0].options.map((element, i) => {
+            return (
+              <View key={i} style={styles.filterView}>
+                <TouchableOpacity onPress={() => changeQuery(element)}>
+                  <Text style={styles.filterText}>{element}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+          <View style={styles.filterView}>
+            <TouchableOpacity onPress={() => changeQuery()}>
+              <Text style={styles.filterText}>اظهار الكل</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      ) : null}
+
+      <View style={styles.sorting}>
+        <TouchableOpacity onPress={() => setSort(['price', 'desc'])}>
+          <View style={styles.sortingView}>
+            <Text style={styles.sortingText}>أكثر مبيعا</Text>
+            <Feather name="arrow-up" color="#F264B1" size={16} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setSort(['price', 'desc'])}>
+          <View style={styles.sortingView}>
+            <Text style={styles.sortingText}>أقل سعرا</Text>
+            <Feather name="arrow-down" color="#F264B1" size={16} />
+          </View>
+        </TouchableOpacity>
+
+        <View style={styles.sortingView}>
+          <Text style={styles.sortingText}>أفضل تقييما</Text>
+          <Feather name="smile" color="#F264B1" size={16} />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={styles.sortingText}>دون فيلتر</Text>
+          <Feather name="filter" color="#F264B1" size={16} />
+        </View>
+      </View>
 
       <FlatList
-        // horizontal={true}
         contentContainerStyle={{alignItems: 'center'}}
         scrollEventThrottle={1}
         showsHorizontalScrollIndicator={false}
@@ -241,12 +411,21 @@ export default function Offers({category = 'بشرة'}) {
         ListFooterComponent={() => renderFooter()}
         // onEndReached={() => more()}
         onEndReachedThreshold={0.1}
-        data={kantaOffers}
+        data={offers}
         renderItem={({item}) => <Kantaoffer offer={item} />}
         // keyExtractor={item => String(item.key)}
-        extraData={render}
+        extraData={loading}
+        onRefresh={true}
         refreshing={refreshing}
       />
+      <View style={styles.customer}>
+        <TouchableOpacity
+          onPress={() => {
+            navigate('Customer');
+          }}>
+          <Feather name="message-circle" size={30} color="white" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

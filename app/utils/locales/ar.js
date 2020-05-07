@@ -1,3 +1,4 @@
 export default {
-  hello: "مرحبا"
+  Hello: 'مرحبا',
+  Book: 'احجز الان',
 };

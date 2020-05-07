@@ -1,9 +1,9 @@
-import I18n from "i18n-js";
-import * as RNLocalize from "react-native-localize";
+import I18n from 'i18n-js';
+import * as RNLocalize from 'react-native-localize';
 
-import en from "./locales/en";
-import fr from "./locales/fr";
-import ar from "./locales/ar";
+import en from './locales/en';
+import fr from './locales/fr';
+import ar from './locales/ar';
 
 const locales = RNLocalize.getLocales();
 
@@ -11,7 +11,6 @@ if (Array.isArray(locales)) {
   I18n.locale = locales[0].languageTag;
 }
 
-// console.log(RNLocalize.getLocales());
 /* -> [
   { countryCode: "GB", languageTag: "en-GB", languageCode: "en", isRTL: false },
   { countryCode: "US", languageTag: "en-US", languageCode: "en", isRTL: false },
@@ -22,7 +21,7 @@ I18n.fallbacks = true;
 I18n.translations = {
   en,
   fr,
-  ar
+  ar,
 };
 
 export default I18n;

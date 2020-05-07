@@ -1,3 +1,4 @@
 export default {
-  hello: "Hello"
+  Hello: 'Hello',
+  Book: 'Book',
 };
