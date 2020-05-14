@@ -6,6 +6,7 @@ import PushController from './app/services/PushNotification';
 import DynamicLinks from './app/services/DynamicLinks';
 import codePush from 'react-native-code-push';
 import analytics from '@react-native-firebase/analytics';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 // codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(MyApp);
 
@@ -13,7 +14,7 @@ import analytics from '@react-native-firebase/analytics';
 // installMode ON_NEXT_RESTART, IMMEDIATE, ON_NEXT_RESUME, ON_NEXT_SUSPEND
 const codePushOptions = {
   updateDialog: true,
-  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+  checkFrequency: codePush.CheckFrequency.MANUAL,
   installMode: codePush.InstallMode.IMMEDIATE,
 };
 
@@ -44,7 +45,7 @@ const App = () => {
   // }
 
   return (
-    <Fragment>
+    <SafeAreaProvider>
       <AppContainer
         ref={navigatorRef => {
           NavigationService.setTopLevelNavigator(navigatorRef);
@@ -64,7 +65,7 @@ const App = () => {
       />
       <PushController />
       <DynamicLinks />
-    </Fragment>
+    </SafeAreaProvider>
   );
 };
 

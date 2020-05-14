@@ -1,15 +1,8 @@
 import React from 'react';
 
-import {
-  View,
-  StyleSheet,
-  Text
-} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 
-import {
-  ThinGrayLine,
-  ThickGrayLine,
-} from './Lines';
+import {ThinGrayLine, ThickGrayLine} from './Lines';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,20 +15,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ({ onPress }) => (
+export default ({onPress}) => (
   <View style={styles.container}>
-    <View style={{ flex: 1 }}>
+    <Text>Profile detail Card</Text>
+
+    <View style={{flex: 1}}>
       <ThickGrayLine width={60} />
-    <Text>Profile detail Card</Text>
 
       <ThinGrayLine width={120} />
     </View>
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <ThickGrayLine width={60} onPress={onPress} />
-    <Text>Profile detail Card</Text>
 
       <ThinGrayLine width={120} />
     </View>
-    
   </View>
 );

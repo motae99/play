@@ -8,16 +8,17 @@ import {createAppContainer} from 'react-navigation';
 import UserContextProvider from '../context/UserContext';
 
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
+import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // import Registration from '../Muzamil/Registration';
 // import ListOffers from '../Muzamil/ListOffers';
 // import Services from '../Muzamil/Services';
 import Customer from '../Muzamil/Customer';
-// import Home from '../Muzamil/Home';
-import ProfileScreen from '../Muzamil/SignOut';
+// import ProfileScreen from '../Muzamil/SignOut';
 
 // import Test from '../Muzamil/Test';
+
+import DetailTest from "../screens/Listing/eventServices/detailScreen";
 
 // import HomeScreen from "../screens/HomeScreen";
 // import PostScreen from "../screens/PostScreen";
@@ -31,6 +32,13 @@ import ProfileScreen from '../Muzamil/SignOut';
 // // import OfferStack from "../screens/Offers/Index";
 // import SocialStack from "../screens/Social/Index";
 
+import Request from '../screens/Admin/Request';
+import ListServices from '../screens/Admin/ListServices/';
+import AppServices from '../screens/Admin/AppServices';
+import EventsInfo from '../screens/AdminParty/EventsInfo';
+
+import Update from '../../Updates';
+
 // import Provider from '../screens/Listing/Provider';
 // import AddEvent from "../screens/Admin/AddEvent"
 // import AddService from "../screens/Admin/Service"
@@ -42,6 +50,7 @@ import ProfileScreen from '../Muzamil/SignOut';
 // import AddEventServices from "../screens/Admin/Services";
 // import Files from "../screens/Admin/Files";
 // import Reservations from "../screens/Admin/Reservations";
+import StyleGuide from '../components/StyleGuide';
 
 import {AnimatedCircleBarComponent} from 'react-navigation-custom-bottom-tab-component/AnimatedCircleBarComponent';
 
@@ -49,12 +58,50 @@ const AppNavigation = createStackNavigator(
   {
     default: createBottomTabNavigator(
       {
-        // Testing: {
-        //   screen: Test,
+        DetailTest: {
+          screen: DetailTest,
+          navigationOptions: {
+            tabBarIcon: ({tintColor}) => (
+              <MIcon name="account-details" size={24} color={tintColor} />
+            ),
+            tabBarVisible: false,
+          },
+        },
+
+        // ListServices: {
+        //   screen: ListServices,
         //   navigationOptions: {
         //     tabBarIcon: ({tintColor}) => (
-        //       <IonIcon name="ios-chatboxes" size={24} color={tintColor} />
+        //       <MIcon name="apps" size={24} color={tintColor} />
         //     ),
+        //   },
+        // },
+
+        // Request: {
+        //   screen: Request,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon
+        //         name="ios-git-pull-request"
+        //         size={24}
+        //         color={tintColor}
+        //       />
+        //     ),
+        //     // tabBarVisible: false,
+        //   },
+        // },
+
+        // Update: {
+        //   screen: Update,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <MIcon
+        //         name="account-card-details-outline"
+        //         size={24}
+        //         color={tintColor}
+        //       />
+        //     ),
+        //     // tabBarVisible: false,
         //   },
         // },
 
@@ -95,15 +142,15 @@ const AppNavigation = createStackNavigator(
         //   },
         // },
 
-        Profile: {
-          screen: ProfileScreen,
-          navigationOptions: {
-            tabBarIcon: ({tintColor}) => (
-              <IonIcon name="ios-person" size={24} color={tintColor} />
-            ),
-            // tabBarVisible: false,
-          },
-        },
+        // Profile: {
+        //   screen: ProfileScreen,
+        //   navigationOptions: {
+        //     tabBarIcon: ({tintColor}) => (
+        //       <IonIcon name="ios-person" size={24} color={tintColor} />
+        //     ),
+        //     // tabBarVisible: false,
+        //   },
+        // },
 
         // Offers: {
         //   screen: Offers,
@@ -257,8 +304,8 @@ const AppNavigation = createStackNavigator(
           },
         },
         tabBarOptions: {
-          activeTintColor: '#161F3D',
-          inactiveTintColor: '#B8BBC4',
+          activeTintColor: StyleGuide.palette.primary,
+          inactiveTintColor: StyleGuide.palette.backgroundPrimary,
           showLabel: true,
         },
       },

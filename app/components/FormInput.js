@@ -15,9 +15,10 @@ const FormInput = ({
   <View style={styles.inputContainer}>
     <Input
       {...rest}
-      leftIcon={<Ionicons name={iconName} size={28} color={iconColor} />}
+      // leftIcon={<Ionicons name={iconName} size={28} color={iconColor} />}
       leftIconContainerStyle={styles.iconStyle}
       placeholderTextColor="rgba(0, 0, 0, 0.5)"
+      keyboardType={keyboardType}
       name={name}
       placeholder={placeholder}
       style={styles.input}
@@ -37,9 +38,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   inputContainer: {
-    marginHorizontal: 10,
+    marginHorizontal: 0,
     marginTop: 5,
-    height: 49,
+    height: 40,
     backgroundColor: '#FFFFFF',
     // borderWidth: 1,
     borderRadius: 5,

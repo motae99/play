@@ -17,12 +17,12 @@ export default function() {
 
   const startOver = () => {
     auth().signOut();
-    navigate('Registration');
+    // navigate('Registration');
   };
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={startOver}>
-        <Text>LogOut</Text>
+        <Text>getOutta here</Text>
       </TouchableOpacity>
     </View>
   );

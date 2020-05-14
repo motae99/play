@@ -8,13 +8,16 @@ import {
   Text,
   Image,
   Alert,
+  Dimensions,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import StyleGuide from './StyleGuide';
 import Video from 'react-native-video';
 import * as Progress from 'react-native-progress';
 
 var ImagePicker = NativeModules.ImageCropPicker;
-
+const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   filesContainer: {
     height: 304,
@@ -35,8 +38,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     borderRadius: 5,
-    backgroundColor: 'white',
-    opacity: 0.5,
+    backgroundColor: StyleGuide.palette.backgroundPrimary,
+    opacity: 0.7,
     width: 46,
     height: 30,
     justifyContent: 'center',
@@ -47,8 +50,8 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     borderRadius: 5,
-    backgroundColor: 'white',
-    opacity: 0.5,
+    backgroundColor: StyleGuide.palette.backgroundPrimary,
+    opacity: 0.7,
     width: 46,
     height: 30,
     justifyContent: 'center',
@@ -199,10 +202,14 @@ const upload = forwardRef(
           <TouchableOpacity
             onPress={() => cleanupSingleImage(image)}
             style={styles.delete}>
-            <Feather name="delete" size={24} color="black" />
+            <Feather
+              name="delete"
+              size={24}
+              color={StyleGuide.palette.primary}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => crop(image)} style={styles.edit}>
-            <Feather name="edit" size={24} color="black" />
+            <Feather name="edit" size={24} color={StyleGuide.palette.primary} />
           </TouchableOpacity>
           {/* {(progressFile == image.index) ? ( */}
           {index === uploadingProg ? (
@@ -235,7 +242,7 @@ const upload = forwardRef(
       <View>
         {images ? (
           <TouchableOpacity style={styles.picker} onPress={pickMultiple}>
-            <Feather name="plus" size={32} color="#D8D9DB" />
+            <Feather name="plus" size={25} color={StyleGuide.palette.primary} />
           </TouchableOpacity>
         ) : null}
 
@@ -254,15 +261,18 @@ const upload = forwardRef(
               </View>
             ))
           ) : (
-            <TouchableOpacity style={styles.picker} onPress={pickMultiple}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Feather name="plus" size={100} color="#D8D9DB" />
-              </View>
+            <TouchableOpacity
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                width,
+              }}
+              onPress={pickMultiple}>
+              <Ionicons
+                name="ios-images"
+                size={100}
+                color={StyleGuide.palette.primary}
+              />
             </TouchableOpacity>
           )}
         </ScrollView>

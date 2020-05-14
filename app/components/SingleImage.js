@@ -8,6 +8,8 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import StyleGuide from './StyleGuide';
+
 import Feather from 'react-native-vector-icons/Feather';
 import * as Progress from 'react-native-progress';
 
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: StyleGuide.palette.backgroundPrimary,
     opacity: 0.5,
     width: 46,
     height: 30,
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: StyleGuide.palette.backgroundPrimary,
     opacity: 0.5,
     width: 46,
     height: 30,
@@ -130,10 +132,10 @@ const upload = ({perc, uploadingProg, image, setImageFunction}) => {
         <TouchableOpacity
           onPress={() => cleanupSingleImage(image)}
           style={styles.delete}>
-          <Feather name="delete" size={24} color="black" />
+          <Feather name="delete" size={24} color={StyleGuide.palette.primary} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => crop(image)} style={styles.edit}>
-          <Feather name="edit" size={24} color="black" />
+          <Feather name="edit" size={24} color={StyleGuide.palette.primary} />
         </TouchableOpacity>
 
         {uploadingProg ? (
@@ -164,7 +166,11 @@ const upload = ({perc, uploadingProg, image, setImageFunction}) => {
               alignContent: 'center',
               alignItems: 'center',
             }}>
-            <Feather name="plus" size={100} color="#D8D9DB" />
+            <Feather
+              name="plus"
+              size={100}
+              color={StyleGuide.palette.primary}
+            />
           </View>
         </TouchableOpacity>
       )}

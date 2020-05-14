@@ -1,69 +1,26 @@
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import FoldView from 'react-native-foldview';
+import React from 'react';
+import {ScrollView} from 'react-native';
+import FoldView from './FoldView';
 
-const Frontface = props => (
-  <View style={{height: 200, backgroundColor: 'blue'}}>
-    <Text>Front Face </Text>
-  </View>
-);
-const Backface = props => (
-  <View style={{height: 200, backgroundColor: 'green'}}>
-    <Text> Back Face </Text>
-  </View>
-);
-const Base = props => (
-  <View style={{height: 200, backgroundColor: 'red'}}>
-    <Text> Base Face </Text>
-  </View>
-);
-
-export default class Row extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      expanded: false,
-    };
-  }
-
-  componentWillMount() {
-    this.flip = this.flip.bind(this);
-  }
-  componentDidMount() {
-    this.flip();
-  }
-
-  flip() {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
-  }
-
-  renderFrontface() {
-    return <Frontface />;
-  }
-
-  renderBackface() {
-    /**
-     * You can nest <FoldView>s here to achieve the folding effect shown in the GIF above.
-     * A reference implementation can be found in examples/Simple.
-     */
-    return <Backface />;
-  }
-
-  render() {
-    return (
-      <FoldView
-        expanded={this.state.expanded}
-        renderBackface={this.renderBackface}
-        renderFrontface={this.renderFrontface}>
-        <Base />
-      </FoldView>
-    );
-  }
+export default function() {
+  return (
+    <ScrollView
+      contentContainerStyle={{
+        backgroundColor: '#555b6e',
+        alignItems: 'center',
+      }}>
+      <FoldView />
+      <FoldView />
+      <FoldView />
+      <FoldView />
+      <FoldView />
+      <FoldView />
+    </ScrollView>
+  );
 }
+
 // import React from 'react';
+
 // import {View, Text, StyleSheet} from 'react-native';
 // import Animated from 'react-native-reanimated';
 // import {
@@ -121,264 +78,191 @@ export default class Row extends Component {
 // // // My Client Secret
 // // // 50b044caaf25de468dd9fadcc34397c7
 
-// // import React from 'react';
-// // import {
-// //   View,
-// //   Text,
-// //   StyleSheet,
-// //   Dimensions,
-// //   Platform,
-// //   TouchableWithoutFeedback,
-// // } from 'react-native';
-// // import Animated, {Easing} from 'react-native-reanimated';
-// // import {
-// //   State,
-// //   TapGestureHandler,
-// //   TouchableOpacity,
-// // } from 'react-native-gesture-handler';
+// import React, {useState} from 'react';
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   Platform,
+//   ScrollView,
+//   TouchableOpacity,
+//   Image,
+// } from 'react-native';
+// import Animated, {Easing} from 'react-native-reanimated';
 
-// // import {
-// //   onGestureEvent,
-// //   withTransition,
-// //   transformOrigin,
-// //   bInterpolate,
-// //   withTimingTransition,
-// //   timing,
-// //   // runTiming,
-// //   delay,
-// //   useValues,
-// //   translateZ,
-// // } from 'react-native-redash';
+// import {
+//   onGestureEvent,
+//   withTransition,
+//   transformOrigin,
+//   bInterpolate,
+//   withTimingTransition,
+//   timing,
+//   useTransition,
+//   delay,
+//   useValues,
+//   translateZ,
+// } from 'react-native-redash';
 
-// // const {
-// //   Value,
-// //   multiply,
-// //   concat,
-// //   set,
-// //   interpolate,
-// //   Extrapolate,
-// //   useCode,
-// //   greaterOrEq,
-// //   eq,
-// //   cond,
-// //   call,
-// //   Clock,
-// //   block,
-// //   and,
-// // } = Animated;
-// // const {width, height} = Dimensions.get('window');
-// // // const perspective = Platform.OS === 'ios' ? 1000 : 800;
-// // const cardWidth = width - 30;
-// // const cardHeigh = cardWidth / 2;
-// // const styles = StyleSheet.create({
-// //   container: {
-// //     width: cardWidth,
-// //     height: cardHeigh,
-// //     alignSelf: 'center',
-// //     // top: 100
-// //   },
-// //   card: {
-// //     ...StyleSheet.absoluteFillObject,
-// //     width: undefined,
-// //     height: undefined,
-// //   },
-// //   base: {
-// //     ...StyleSheet.absoluteFillObject,
-// //     width: undefined,
-// //     height: undefined,
-// //     borderTopStartRadius: 10,
-// //     borderTopEndRadius: 10,
-// //   },
-// //   innerCard: {
-// //     ...StyleSheet.absoluteFillObject,
-// //     width: undefined,
-// //     height: undefined,
-// //     borderTopStartRadius: 10,
-// //     borderTopEndRadius: 10,
-// //   },
-// //   frontCard: {
-// //     ...StyleSheet.absoluteFillObject,
-// //     width: undefined,
-// //     height: undefined,
-// //     // borderRadius: 10,
-// //   },
-// // });
+// const {
+//   Value,
+//   multiply,
+//   concat,
+//   set,
+//   interpolate,
+//   Extrapolate,
+//   useCode,
+//   greaterOrEq,
+//   eq,
+//   cond,
+//   call,
+//   Clock,
+//   block,
+//   and,
+//   lessOrEq,
+//   lessThan,
+//   greaterThan,
+// } = Animated;
 
-// // export default () => {
-// //   const [toggle, from, to] = useValues([0, 0, 1], []);
-// //   // const [from] = useValues<0 | 1>([0], [])
-// //   // const [to] = useValues<0 | 1>([0], [])
+// import FirstNest from './Components/FirstNest';
+// import {
+//   cardWidth,
+//   cardHeigh,
+//   perspective,
+//   fHeight,
+//   sHeight,
+// } from './Components/FoldingStyle';
+// import Base from './Components/Base';
+// import FrontFace from './Components/FrontFace';
+// import BackFace from './Components/BackFace';
+// const styles = StyleSheet.create({
+//   container: {
+//     width: cardWidth,
+//     height: cardHeigh,
+//     alignSelf: 'center',
+//     // top: 100
+//   },
+//   card: {
+//     // ...StyleSheet.absoluteFillObject,
+//     width: undefined,
+//     height: undefined,
+//   },
+//   base: {
+//     ...StyleSheet.absoluteFillObject,
+//     width: undefined,
+//     height: undefined,
+//     borderTopStartRadius: 10,
+//     borderTopEndRadius: 10,
+//   },
+//   innerCard: {
+//     ...StyleSheet.absoluteFillObject,
+//     width: undefined,
+//     height: undefined,
+//     borderTopStartRadius: 10,
+//     borderTopEndRadius: 10,
+//   },
+//   frontCard: {
+//     ...StyleSheet.absoluteFillObject,
+//     width: undefined,
+//     height: undefined,
+//     // borderRadius: 10,
+//   },
+// });
 
-// //   const expand = () => {
-// //     // useCode(() => set(from, 0), [from, to]);
-// //     // useCode(() => set(to, 1), [from, to]);
-// //   };
+// const Fold = () => {
+//   const [open, setOpen] = useState(false);
+//   const animation = useTransition(open, {duration: 700});
+//   const [backZindex, frontZindex] = useValues([0, 1]);
 
-// //   const TOP = 200;
-// //   // const collabse = () => {
-// //   //   useCode(() => set(from, 1), [from, to]);
-// //   //   useCode(() => set(to, 0), [from, to]);
-// //   // };
+//   const toggle = () => {
+//     setOpen(prev => !prev);
+//   };
 
-// //   useCode(
-// //     () =>
-// //       block([
-// //         // and(cond(from, 0), cond(to, 1)), (set(from, 1), set(to, 0)),
-// //         // and(cond(from, 1), cond(to, 0)), (set(from, 0), set(to, 1)),
-// //         // set(from, 0)
-// //       ]),
-// //     [from, to],
-// //   );
+//   const height = interpolate(animation, {
+//     inputRange: [0, 0.8],
+//     outputRange: [cardHeigh, cardHeigh * 2 + fHeight + sHeight + 5],
+//     extrapolate: Extrapolate.CLAMP,
+//   });
 
-// //   const rotateNext = (new Value() < 0) | (1 > 0);
+//   const rotateXAsDegBack = interpolate(animation, {
+//     inputRange: [0, 0.4],
+//     outputRange: [0, -180],
+//     extrapolate: Extrapolate.CLAMP,
+//   });
 
-// //   const animation = timing({
-// //     duration: 1000,
-// //     from: 0,
-// //     to: 1,
-// //     easing: Easing.linear,
-// //   });
+//   const rotateX = concat(rotateXAsDegBack, 'deg');
 
-// //   const rotateXAsDegBack = interpolate(animation, {
-// //     inputRange: [0, 0.7],
-// //     outputRange: [0, -180],
-// //     extrapolate: Extrapolate.CLAMP,
-// //   });
+//   useCode(
+//     () =>
+//       block([
+//         // cond(greaterThan(animation, 0.4), set(backZindex, 2), 0),
+//         // cond(
+//         //   greaterThan(animation, 0.4),
+//         //   // set(backZindex, 10),
+//         //   [
+//         //     // set(frontZindex, 0),
+//         //     set(backZindex, 1),
+//         //     set(frontZindex, 0),
+//         //     // call([], () => {
+//         //     //   console.log('  backZindex  ', backZindex);
+//         //     // }),
+//         //   ],
+//         // ),
+//         // cond(
+//         //   lessThan(animation, 0.4),
+//         //   // set(backZindex, 10),
+//         //   [
+//         //     // set(frontZindex, 0),
+//         //     set(backZindex, 0),
+//         //     set(frontZindex, 1),
+//         //     // call([], () => {
+//         //     //   console.log('  backZindex  ', backZindex);
+//         //     // }),
+//         //   ],
+//         // ),
+//       ]),
 
-// //   const rotateX = concat(rotateXAsDegBack, 'deg');
+//     [animation, backZindex, frontZindex],
+//   );
 
-// //   const NrotateXAsDegBack = interpolate(rotateNext, {
-// //     inputRange: [0.7, 1],
-// //     outputRange: [0, -180],
-// //     extrapolate: Extrapolate.CLAMP,
-// //   });
-// //   const NrotateX = concat(NrotateXAsDegBack, 'deg');
+//   return (
+//     <Animated.View style={{margin: 6, height, width: cardWidth}}>
+//       <Animated.View style={styles.container}>
+//         <Base {...{toggle, animation}} />
 
-// //   // // const rotateXInner = concat(rotateXAsDegBack, "deg");
+//         <Animated.View
+//           style={{
+//             ...StyleSheet.absoluteFillObject,
+//             // backfaceVisibility: 'hidden',
+//             justifyContent: 'center',
+//             alignItems: 'center',
+//             // zIndex: animation,
+//             transform: [
+//               {perspective},
+//               {translateY: cardHeigh / 2},
+//               {rotateX},
+//               {translateY: -cardHeigh / 2},
+//               {rotateX: '180deg'},
+//             ],
+//           }}>
+//           <BackFace {...{toggle}} />
 
-// //   // useCode(  () => block([
-// //   //     cond( greaterOrEq(animation, 1), [
-// //   //       set(rotateNext, timing({
-// //   //           duration: 1000,
-// //   //           from: 0,
-// //   //           to: 1,
-// //   //           easing: Easing.linear
-// //   //         })
-// //   //       ),
-// //   //     ]
-// //   //   ),
-// //   //   // cond( greaterOrEq(animation, 1), [
-// //   //   //   delay(set(rotateNext, 1), 1000)
+//           <FirstNest {...{animation, toggle}} />
+//         </Animated.View>
 
-// //   //   //   ]
-// //   //   // ),
-// //   // ]),
-
-// //   //   [rotateNext, animation]
-// //   //   );
-// //   // useCode(() => cond(toggle, greaterOrEq(animation, 1), set(toggle, 1) ),  [toggle, animation])
-// //   // const transition = withTransition(NrotateXAsDegBack)
-// //   // const NrotateX = concat(transition, "deg");
-
-// //   const z = new Value(1);
-// //   const perspective = 800;
-// //   return (
-// //     <View>
-// //       <Animated.View
-// //         style={{
-// //           height: 100,
-// //           width,
-// //           backgroundColor: 'black',
-// //           // transform: [{translateY}],
-// //         }}
-// //       />
-// //       <Animated.View style={[styles.container]}>
-// //         {/* <Animated.Code>
-// //         {
-// //           () => call([rotateX], ([rotateX]) => console.log(rotateX) )
-// //         }
-// //       </Animated.Code> */}
-// //         <View style={[styles.base, {backgroundColor: 'blue'}]}>
-// //           <Text style={{alignSelf: 'center', color: 'white', fontSize: 20}}>
-// //             Base layout
-// //           </Text>
-// //         </View>
-
-// //         <Animated.View
-// //           style={{
-// //             ...StyleSheet.absoluteFillObject,
-// //             justifyContent: 'center',
-// //             alignItems: 'center',
-// //             transform: transformOrigin(
-// //               {
-// //                 x: 0,
-// //                 y: cardHeigh / 2,
-// //               },
-// //               {rotateX},
-// //               {perspective},
-// //               // translateZ(perspective, animation),
-// //             ),
-// //           }}>
-// //           <View
-// //             style={[
-// //               styles.card,
-// //               {backgroundColor: 'red', transform: [{rotateX: '180deg'}]},
-// //             ]}>
-// //             <Text style={{alignSelf: 'center', color: 'white', fontSize: 72}}>
-// //               Back
-// //             </Text>
-// //             <View
-// //               style={{
-// //                 height: cardHeigh / 3,
-// //                 width: cardWidth,
-// //                 ...StyleSheet.absoluteFillObject,
-// //               }}>
-// //               {/* <Animated.View
-// //                 style={{
-// //                   ...StyleSheet.absoluteFillObject,
-// //                   // opacity,
-// //                   // backfaceVisibility: "hidden",
-// //                   transform: transformOrigin(
-// //                     {
-// //                       x: 0,
-// //                       y: cardHeigh / 6,
-// //                     },
-// //                     {rotateX: NrotateX},
-// //                     {perspective},
-// //                   ),
-// //                 }}>
-// //                 <View style={[styles.innerCard, {backgroundColor: 'aqua'}]}>
-// //                   <Text
-// //                     style={{alignSelf: 'center', color: 'white', fontSize: 20}}>
-// //                     front Face
-// //                   </Text>
-// //                 </View>
-// //               </Animated.View> */}
-// //             </View>
-// //           </View>
-// //         </Animated.View>
-
-// //         <Animated.View
-// //           style={{
-// //             ...StyleSheet.absoluteFillObject,
-// //             backfaceVisibility: 'hidden',
-// //             transform: transformOrigin(
-// //               {
-// //                 x: 0,
-// //                 y: cardHeigh / 2,
-// //               },
-// //               {rotateX},
-// //               {perspective},
-// //               // translateZ(perspective, animation),
-// //             ),
-// //           }}>
-// //           <TouchableWithoutFeedback onPress={expand}>
-// //             <View style={[styles.frontCard, {backgroundColor: 'green'}]}>
-// //               <Text>front Face</Text>
-// //             </View>
-// //           </TouchableWithoutFeedback>
-// //         </Animated.View>
-// //       </Animated.View>
-// //     </View>
-// //   );
-// // };
+//         <Animated.View
+//           style={{
+//             ...StyleSheet.absoluteFillObject,
+//             backfaceVisibility: 'hidden',
+//             transform: [
+//               {perspective},
+//               {translateY: cardHeigh / 2},
+//               {rotateX},
+//               {translateY: -cardHeigh / 2},
+//             ],
+//           }}>
+//           <FrontFace {...{toggle}} />
+//         </Animated.View>
+//       </Animated.View>
+//     </Animated.View>
+//   );
+// };

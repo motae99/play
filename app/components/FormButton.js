@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button} from 'react-native-elements';
+import StyleGuide from './StyleGuide';
 
 const FormButton = ({title, buttonType, buttonColor, ...rest}) => (
   <Button
@@ -10,7 +11,7 @@ const FormButton = ({title, buttonType, buttonColor, ...rest}) => (
       // borderColor: buttonColor,
       // height,
       borderRadius: 5,
-      backgroundColor: '#F264B1',
+      backgroundColor: StyleGuide.palette.backgroundPrimary,
     }}
     // buttonStyle={{ borderColor: buttonColor, borderRadius: 20 }}
     titleStyle={{color: buttonColor}}

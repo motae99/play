@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Platform} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
@@ -30,7 +30,11 @@ export default ({name, color, onMeasurement, onPress}) => {
             : undefined
         }
         style={styles.container}>
-        <Text style={[styles.text, {color}]}>{name}</Text>
+        {Platform.OS === 'ios' ? (
+          <Text style={[styles.text, {color}]}>{name}</Text>
+        ) : (
+          <Text style={[styles.text, {}]}>{name}</Text>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

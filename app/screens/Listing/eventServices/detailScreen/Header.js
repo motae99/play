@@ -1,17 +1,20 @@
 import React, {RefObject} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import Animated from 'react-native-reanimated';
+import {useValues, withTimingTransition} from 'react-native-redash';
 import Icon from 'react-native-vector-icons/Feather';
 import {useSafeArea} from 'react-native-safe-area-context';
-import {useValues, withTransition} from 'react-native-redash';
+
+import {useNavigation} from 'react-navigation-hooks';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {HEADER_IMAGE_HEIGHT} from './HeaderImage';
 import TabHeader from './TabHeader';
 import {TabModel} from './Content';
-import Animated from 'react-native-reanimated';
 
-const {interpolate, Extrapolate, useCode, set, greaterOrEq} = Animated;
 const ICON_SIZE = 24;
 const PADDING = 16;
 export const MIN_HEADER_HEIGHT = 45;
+const {interpolate, Extrapolate, useCode, greaterThan, set, block} = Animated;
 
 const styles = StyleSheet.create({
   container: {
@@ -30,58 +33,68 @@ const styles = StyleSheet.create({
     fontFamily: 'UberMoveMedium',
     fontSize: 18,
     marginLeft: PADDING,
+    // marginTop: PADDING+5,
     flex: 1,
   },
 });
 
-export default ({tabs, y}) => {
-  const insets = useSafeArea();
+export default ({y, tabs, scrollView}) => {
+  const {goBack} = useNavigation();
   const [toggle] = useValues([0], []);
+  const insets = useSafeArea();
+  const transition = withTimingTransition(toggle, {duration: 100});
+
   const {top: paddingTop} = insets;
-
-  const translateY = interpolate(y, {
-    inputRange: [0, HEADER_IMAGE_HEIGHT],
-    outputRange: [HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT + 15, 0],
-    extrapolateRight: Extrapolate.CLAMP,
-  });
-
   const translateX = interpolate(y, {
     inputRange: [0, HEADER_IMAGE_HEIGHT],
-    outputRange: [-(ICON_SIZE + PADDING), 0],
+    outputRange: [-ICON_SIZE - PADDING, 0],
     extrapolate: Extrapolate.CLAMP,
   });
-
-  const transition = withTransition(toggle);
+  const translateY = interpolate(y, {
+    inputRange: [-100, 0, HEADER_IMAGE_HEIGHT],
+    outputRange: [
+      HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT + 100,
+      HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT,
+      0,
+    ],
+    extrapolateRight: Extrapolate.CLAMP,
+  });
   const opacity = transition;
-  useCode(() => set(toggle, greaterOrEq(y, HEADER_IMAGE_HEIGHT)), [toggle, y]);
+  useCode(() => block([set(toggle, greaterThan(y, HEADER_IMAGE_HEIGHT))]), [
+    toggle,
+    y,
+  ]);
   return (
-    <View style={[styles.container, {paddingTop}]}>
+    <Animated.View style={[styles.container, {paddingTop}]}>
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: 'white',
           opacity,
+          backgroundColor: 'white',
         }}
       />
       <View style={styles.header}>
-        <View>
-          <Icon name="arrow-left" size={ICON_SIZE} color="white" />
-          <Animated.View style={{...StyleSheet.absoluteFillObject, opacity}}>
-            <Icon name="arrow-left" size={ICON_SIZE} color="black" />
-          </Animated.View>
-        </View>
+        <TouchableWithoutFeedback onPress={() => goBack()}>
+          <View>
+            <Icon name="arrow-left" size={ICON_SIZE} color="white" />
+            <Animated.View style={{...StyleSheet.absoluteFillObject, opacity}}>
+              <Icon name="arrow-left" size={ICON_SIZE} color="black" />
+            </Animated.View>
+          </View>
+        </TouchableWithoutFeedback>
         <Animated.Text
-          style={[styles.title, {transform: [{translateY}, {translateX}]}]}>
+          style={[styles.title, {transform: [{translateX}, {translateY}]}]}>
           Miss Miu Europaallee
         </Animated.Text>
         <View>
           <Icon name="heart" size={ICON_SIZE} color="white" />
-          <Animated.View style={{...StyleSheet.absoluteFillObject, opacity}}>
+          <Animated.View
+            style={{...StyleSheet.absoluteFillObject, opacity: transition}}>
             <Icon name="search" size={ICON_SIZE} color="black" />
           </Animated.View>
         </View>
       </View>
-      <TabHeader {...{tabs, transition, y}} />
-    </View>
+      <TabHeader {...{y, transition, tabs, scrollView}} />
+    </Animated.View>
   );
 };

@@ -6,7 +6,6 @@ import FoldView from '../../index';
 
 import ProfileDetailCard from './ProfileDetailCard';
 import AdditionalInfoCard from './AdditionalInfoCard';
-import Inner from './Inner';
 
 import {ThinGrayLine, ThickDarkGrayLine} from './Lines';
 
@@ -25,11 +24,6 @@ export default class Row extends Component {
         }}
       />
     );
-  }
-
-  renderBackface() {
-    const onPress = this.props.onPress;
-    return <Inner onPress={onPress} />;
   }
 
   renderInnerBackFace() {
@@ -69,56 +63,14 @@ export default class Row extends Component {
     const onPress = this.props.onPress;
 
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: '#fff',
-          flexDirection: 'column',
-        }}>
-        <View style={{flex: 1}}>
-          <View
-            style={{
-              flex: 1,
-              paddingBottom: 10,
-              padding: 16,
-            }}>
-            <ThinGrayLine width={120} />
-
-            <View
-              style={{
-                marginTop: 10,
-                flexDirection: 'row',
-              }}>
-              <TouchableHighlight onPress={onPress}>
-                <View
-                  style={{
-                    width: 40,
-                    height: 80,
-                    marginRight: 10,
-                    backgroundColor: '#BDC2C9',
-                  }}
-                />
-              </TouchableHighlight>
-
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                }}>
-                <ThickDarkGrayLine width={200} />
-                <ThinGrayLine width={120} />
-              </View>
-            </View>
-          </View>
-
-          <View style={{flex: 1}}>
-            <FoldView
-              renderFrontface={this.renderBlankFace}
-              renderBackface={<Inner onPress={onPress} />}>
-              <ProfileDetailCard onPress={onPress} />
-            </FoldView>
-          </View>
-        </View>
+      <View style={{flex: 1}}>
+        <FoldView
+          renderFrontface={this.renderBlankFace}
+          renderBackface={this.renderInnerBackFace}
+          // perspective={1000}
+        >
+          <AdditionalInfoCard onPress={onPress} />
+        </FoldView>
       </View>
     );
   }
